@@ -1,0 +1,13 @@
+{
+    "KPackageStructure": "KWin/Script",
+    "KPlugin": {
+        "Authors": [{ "Name": "Fabian" }],
+        "Description": "Keep maximized windows floating with a small gap",
+        "Id": "floatingwindows",
+        "License": "MIT",
+        "Name": "Floating Windows",
+        "Version": "0.1"
+    },
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js"
+}

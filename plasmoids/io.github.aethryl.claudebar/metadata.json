@@ -1,0 +1,14 @@
+{
+    "KPlugin": {
+        "Authors": [{ "Name": "Fabian" }],
+        "Category": "System Information",
+        "Description": "Claude agent states and usage limits",
+        "Icon": "dialog-information",
+        "Id": "io.github.aethryl.claudebar",
+        "License": "MIT",
+        "Name": "Claude Bar",
+        "Version": "0.1"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

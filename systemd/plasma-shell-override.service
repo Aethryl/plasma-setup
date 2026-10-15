@@ -1,0 +1,11 @@
+[Unit]
+Description=Rebuild patched Plasma desktop shell override
+Before=plasma-plasmashell.service
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/Repos/plasma-customizations/shell-override/sync.sh
+
+[Install]
+WantedBy=plasma-plasmashell.service
