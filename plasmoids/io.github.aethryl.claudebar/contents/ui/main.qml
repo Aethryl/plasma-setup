@@ -133,7 +133,7 @@ PlasmoidItem {
             readonly property real cell: Math.max(2, Math.round(Kirigami.Units.gridUnit * 0.2 * dpr)) / dpr
             readonly property real gap: Math.max(1, Math.round(dpr)) / dpr
             readonly property int columns: 3
-            readonly property int rows: 2
+            readonly property int rows: 3
             readonly property int filled: Math.min(columns * rows, Math.max(0, Number(count.value) || 0))
             readonly property bool beating: count.pulse && count.visible && Kirigami.Units.longDuration > 0
             implicitWidth: columns * cell + (columns - 1) * gap
@@ -159,9 +159,9 @@ PlasmoidItem {
             Rectangle {
                 id: tab
                 anchors.bottom: parent.bottom
-                width: parent.width
-                height: Math.max(2, Math.round(Kirigami.Units.smallSpacing / 2))
-                radius: height / 2
+                x: 0
+                width: cells.width
+                height: Math.max(2, Math.round(Kirigami.Units.smallSpacing / 2 * stack.dpr)) / stack.dpr
                 color: count.dotColor
             }
             QtObject {
