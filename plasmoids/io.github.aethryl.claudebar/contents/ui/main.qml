@@ -128,43 +128,51 @@ PlasmoidItem {
         property bool pulse: false
         spacing: Kirigami.Units.smallSpacing / 2
         Item {
-            id: dotSlot
-            readonly property bool beating: count.pulse && count.visible
-            readonly property bool animated: Kirigami.Units.longDuration > 0
-            implicitWidth: dot.implicitWidth
-            implicitHeight: dot.implicitHeight
+            id: stack
+            readonly property real dpr: Screen.devicePixelRatio || 1
+            readonly property real cell: Math.max(2, Math.round(Kirigami.Units.gridUnit * 0.2 * dpr)) / dpr
+            readonly property real gap: Math.max(1, Math.round(dpr)) / dpr
+            readonly property int columns: 3
+            readonly property int rows: 2
+            readonly property int filled: Math.min(columns * rows, Math.max(0, Number(count.value) || 0))
+            readonly property bool beating: count.pulse && count.visible && Kirigami.Units.longDuration > 0
+            implicitWidth: columns * cell + (columns - 1) * gap
+            implicitHeight: rows * cell + (rows - 1) * gap + gap + tab.height
             Layout.alignment: Qt.AlignVCenter
 
-            function settle() {
-                dot.scale = 1
-                halo.scale = 1
-                halo.opacity = beating && !animated ? 0.35 : 0
-            }
-            onBeatingChanged: settle()
-            onAnimatedChanged: settle()
-
-            Rectangle {
-                id: halo
-                anchors.fill: parent
-                radius: width / 2
-                color: count.dotColor
-                opacity: 0
-            }
-            Dot {
-                id: dot
-                anchors.fill: parent
-                dotColor: count.dotColor
-            }
-            ParallelAnimation {
-                running: dotSlot.beating && dotSlot.animated
-                loops: Animation.Infinite
-                onRunningChanged: if (!running) dotSlot.settle()
-                SequentialAnimation {
-                    NumberAnimation { target: dot; property: "scale"; from: 1; to: 1.3; duration: 700; easing.type: Easing.InOutQuad }
-                    NumberAnimation { target: dot; property: "scale"; from: 1.3; to: 1; duration: 700; easing.type: Easing.InOutQuad }
+            Grid {
+                id: cells
+                columns: stack.columns
+                spacing: stack.gap
+                Repeater {
+                    model: stack.columns * stack.rows
+                    Rectangle {
+                        readonly property int slot: (stack.rows - 1 - Math.floor(index / stack.columns)) * stack.columns + index % stack.columns
+                        readonly property bool on: slot < stack.filled
+                        width: stack.cell
+                        height: stack.cell
+                        color: on ? count.dotColor : Qt.alpha(count.dotColor, 0.18)
+                        opacity: on && stack.beating ? pulseLevel.value : 1
+                    }
                 }
-                NumberAnimation { target: halo; property: "scale"; from: 1; to: 2.6; duration: 1400; easing.type: Easing.OutQuad }
-                NumberAnimation { target: halo; property: "opacity"; from: 0.35; to: 0; duration: 1400; easing.type: Easing.OutQuad }
+            }
+            Rectangle {
+                id: tab
+                anchors.bottom: parent.bottom
+                width: parent.width
+                height: Math.max(2, Math.round(Kirigami.Units.smallSpacing / 2))
+                radius: height / 2
+                color: count.dotColor
+            }
+            QtObject {
+                id: pulseLevel
+                property real value: 1
+                SequentialAnimation on value {
+                    running: stack.beating
+                    loops: Animation.Infinite
+                    NumberAnimation { to: 0.25; duration: 700; easing.type: Easing.InOutQuad }
+                    NumberAnimation { to: 1; duration: 700; easing.type: Easing.InOutQuad }
+                }
             }
         }
         PlasmaComponents.Label {
