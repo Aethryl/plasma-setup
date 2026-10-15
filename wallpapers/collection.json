@@ -9,15 +9,6 @@
   "license": "own collection"
  },
  {
-  "id": "df-anime-ish-731548",
-  "collection": "anime-ish",
-  "title": "731548",
-  "source": "Aethryl/dotfiles",
-  "page": "https://github.com/Aethryl/dotfiles",
-  "dotfiles": "archive/ubuntu-stow/dot-background-profiles/anime-ish/731548.jpg",
-  "license": "own collection"
- },
- {
   "id": "df-anime-ish-977922",
   "collection": "anime-ish",
   "title": "977922",
@@ -360,15 +351,6 @@
   "license": "Public domain (NASA)"
  },
  {
-  "id": "pd-jpl-visions-of-the-future-mars",
-  "collection": "retro-futurism",
-  "title": "Mars: Historic Sites",
-  "source": "NASA/JPL Visions of the Future",
-  "page": "https://commons.wikimedia.org/wiki/File:JPL_Visions_of_the_Future,_Mars.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/5/57/JPL_Visions_of_the_Future%2C_Mars.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
   "id": "pd-jpl-visions-of-the-future-venus",
   "collection": "retro-futurism",
   "title": "Venus: Cloud 9 Observatory",
@@ -384,15 +366,6 @@
   "source": "NASA/JPL Exoplanet Travel Bureau",
   "page": "https://commons.wikimedia.org/wiki/File:Kepler-16b_39x27_CMYK-1.jpg",
   "url": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Kepler-16b_39x27_CMYK-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
-  "id": "pd-space-colony",
-  "collection": "retro-futurism",
-  "title": "Space Colony (Cutaway)",
-  "source": "NASA Ames Space Settlement (1970s)",
-  "page": "https://commons.wikimedia.org/wiki/File:Space_Colony_(AC76-0628).jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/7/74/Space_Colony_%28AC76-0628%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
   "license": "Public domain (NASA)"
  },
  {
@@ -612,15 +585,6 @@
   "license": "unclear (Wallhaven upload)"
  },
  {
-  "id": "wh-j3e31w",
-  "collection": "space",
-  "title": "Neon ringed planet on dark red",
-  "source": "Wallhaven",
-  "page": "https://wallhaven.cc/w/j3e31w",
-  "url": "https://w.wallhaven.cc/full/j3/wallhaven-j3e31w.jpg",
-  "license": "unclear (Wallhaven upload)"
- },
- {
   "id": "wh-p93gm9",
   "collection": "space",
   "title": "Earth seen through ring portal",
@@ -645,15 +609,6 @@
   "source": "neonvoidx/pics",
   "page": "https://github.com/neonvoidx/pics/blob/master/ultrawide/cockpitspace.jpg",
   "url": "https://raw.githubusercontent.com/neonvoidx/pics/master/ultrawide/cockpitspace.jpg",
-  "license": "unclear"
- },
- {
-  "id": "gh-deathstar-tie",
-  "collection": "spaceships",
-  "title": "Fighter and battle station",
-  "source": "dharmx/walls",
-  "page": "https://github.com/dharmx/walls/blob/main/nord/a_space_ship_flying_in_the_sky.jpg",
-  "url": "https://raw.githubusercontent.com/dharmx/walls/main/nord/a_space_ship_flying_in_the_sky.jpg",
   "license": "unclear"
  },
  {
