@@ -327,8 +327,8 @@ PlasmoidItem {
 
                 Image {
                     readonly property real dpr: Screen.devicePixelRatio || 1
-                    readonly property int dot: Math.max(1, Math.round(Kirigami.Units.gridUnit * 0.5 * dpr / 6))
-                    Layout.preferredHeight: dot * 6 / dpr
+                    readonly property int dot: Math.max(1, Math.round(Kirigami.Units.gridUnit * 0.7 * dpr / 12))
+                    Layout.preferredHeight: dot * 12 / dpr
                     Layout.preferredWidth: dot * 18 / dpr
                     source: Qt.resolvedUrl("../images/clawd.svg")
                     sourceSize: Qt.size(Layout.preferredWidth, Layout.preferredHeight)
