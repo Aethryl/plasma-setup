@@ -1,5 +1,5 @@
 --- a/contents/views/Panel.qml	2026-09-08 02:00:00.000000000 +0200
-+++ b/contents/views/Panel.qml	2026-10-15 12:09:53.479057206 +0200
++++ b/contents/views/Panel.qml	2026-10-15 17:00:08.099945658 +0200
 @@ -51,10 +51,12 @@
  
      // NOTE: Many of the properties in this file are accessed directly in C++ PanelView!
@@ -33,7 +33,22 @@
  
          imagePath: containment?.plasmoid?.backgroundHints === PlasmaCore.Types.NoBackground ? "" : "widgets/panel-background"
      }
-@@ -369,6 +371,6 @@
+@@ -169,6 +171,14 @@
+         anchors.fill: floatingTranslucentItem
+         imagePath: containment?.plasmoid?.backgroundHints === PlasmaCore.Types.NoBackground ? "" : "solid/widgets/panel-background"
+     }
++    Rectangle {
++        visible: root.topBar && root.floatingness !== 0 && containment?.plasmoid?.backgroundHints !== PlasmaCore.Types.NoBackground
++        anchors.fill: floatingTranslucentItem
++        radius: Kirigami.Units.cornerRadius
++        color: Qt.tint(Kirigami.Theme.backgroundColor, Qt.alpha(Kirigami.Theme.textColor, 0.08))
++        border.width: 1
++        border.color: Qt.alpha(Kirigami.Theme.textColor, 0.14)
++    }
+     KSvg.FrameSvgItem {
+         id: opaqueItem
+         visible: root.panelOpacity !== 0 && root.floatingness === 0
+@@ -369,6 +379,6 @@
          id: containmentParent
          anchors.centerIn: root.isOpaque ? floatingOpaqueItem : floatingTranslucentItem
          width: root.verticalPanel ? panel.thickness : root.width - root.fixedLeftFloatingPadding - root.fixedRightFloatingPadding

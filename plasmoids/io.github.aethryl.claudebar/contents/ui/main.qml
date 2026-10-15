@@ -380,7 +380,7 @@ PlasmoidItem {
                     readonly property real h: Math.max(notch.shownHeight, e + 1)
                     readonly property real r: Math.min(root.bottomRadius, h - e)
                     strokeWidth: -1
-                    fillColor: Kirigami.Theme.backgroundColor
+                    fillColor: Qt.tint(Kirigami.Theme.backgroundColor, Qt.alpha(Kirigami.Theme.textColor, 0.08))
                     startX: 0; startY: 0
                     PathQuad { controlX: sp.e; controlY: 0; x: sp.e; y: sp.e }
                     PathLine { x: sp.e; y: sp.h - sp.r }

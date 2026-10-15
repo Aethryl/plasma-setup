@@ -20,7 +20,9 @@ for variant in Dark Light; do
 done
 ln -sfn "$repo/bin/everforest" "$HOME/.local/bin/everforest"
 ln -sfn "$repo/applications/everforest-toggle.desktop" "$data/applications/everforest-toggle.desktop"
-kwriteconfig6 --file kglobalshortcutsrc --group services --group everforest-toggle.desktop --key _launch "Meta+Shift+L"
+toggle="['everforest-toggle.desktop','_launch','Toggle light/dark','Toggle light/dark']"
+gdbus call --session -d org.kde.kglobalaccel -o /kglobalaccel -m org.kde.KGlobalAccel.doRegister "$toggle" >/dev/null
+gdbus call --session -d org.kde.kglobalaccel -o /kglobalaccel -m org.kde.KGlobalAccel.setForeignShortcut "$toggle" "[301989964]" >/dev/null
 
 "$repo/shell-override/sync.sh"
 systemctl --user link "$repo/systemd/plasma-shell-override.service"
