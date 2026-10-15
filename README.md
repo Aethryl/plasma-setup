@@ -39,10 +39,10 @@ My KDE Plasma 6 setup: a floating top bar, floating maximized windows, a Claude 
 ./install.sh
 systemctl --user restart plasma-plasmashell
 gdbus call --session -d org.kde.plasmashell -o /PlasmaShell \
-  -m org.kde.PlasmaShell.evaluateScript "$(cat panel/add-claudebar.js)"
+  -m org.kde.PlasmaShell.evaluateScript "$(cat panel/add-claudebar.js panel/add-wallbar.js)"
 ```
 
-The widget is appended at the end of the panel; drag it between the two spacers in edit mode.
+The widgets are added at the end of the panel; in edit mode, drag them into the order sysbar, claudebar, wallbar, system tray. Claudebar fills the free space and centres itself on the screen, so the panel needs no spacers.
 
 ## Undo the shell override
 

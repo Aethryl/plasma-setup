@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Shapes
+import QtQuick.Window
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.plasmoid
 import org.kde.plasma.components as PlasmaComponents
@@ -300,28 +301,41 @@ PlasmoidItem {
         }
     }
 
-    compactRepresentation: MouseArea {
+    compactRepresentation: Item {
+        id: holder
         Layout.minimumWidth: row.implicitWidth
         Layout.preferredWidth: row.implicitWidth
-        onWidthChanged: root.compactWidth = width
-        Component.onCompleted: root.compactItem = this
-        onClicked: root.drooped = !root.drooped
+        Layout.fillWidth: true
+        property real globalX: 0
+        function place() { globalX = mapToGlobal(0, 0).x }
+        onXChanged: place()
+        onWidthChanged: place()
+        Component.onCompleted: { root.compactItem = area; place() }
 
-        RowLayout {
-            id: row
-            anchors.centerIn: parent
-            spacing: Kirigami.Units.largeSpacing
+        MouseArea {
+            id: area
+            width: row.implicitWidth
+            height: parent.height
+            x: Math.max(0, Math.min(holder.width - width, holder.Screen.virtualX + holder.Screen.width / 2 - holder.globalX - width / 2))
+            onWidthChanged: root.compactWidth = width
+            onClicked: root.drooped = !root.drooped
 
             RowLayout {
-                spacing: Kirigami.Units.smallSpacing * 2
-                Count { dotColor: root.ok; value: root.agents ? root.agents.working : null }
-                Count { dotColor: root.blocked; pulse: !!root.agents && root.agents.blocked > 0; value: root.agents ? root.agents.blocked : null }
-                Count { dotColor: root.dim; value: root.agents ? root.agents.idle : null }
+                id: row
+                anchors.centerIn: parent
+                spacing: Kirigami.Units.largeSpacing
+
+                RowLayout {
+                    spacing: Kirigami.Units.smallSpacing * 2
+                    Count { dotColor: root.ok; value: root.agents ? root.agents.working : null }
+                    Count { dotColor: root.blocked; pulse: !!root.agents && root.agents.blocked > 0; value: root.agents ? root.agents.blocked : null }
+                    Count { dotColor: root.dim; value: root.agents ? root.agents.idle : null }
+                }
+                Rectangle { Layout.preferredWidth: 1; Layout.preferredHeight: row.height * 0.7; color: root.dim }
+                Meter { label: "5h"; win: root.bar ? root.bar.five_hour : null }
+                Rectangle { Layout.preferredWidth: 1; Layout.preferredHeight: row.height * 0.7; color: root.dim }
+                Meter { label: "7d"; win: root.bar ? root.bar.seven_day : null }
             }
-            Rectangle { Layout.preferredWidth: 1; Layout.preferredHeight: row.height * 0.7; color: root.dim }
-            Meter { label: "5h"; win: root.bar ? root.bar.five_hour : null }
-            Rectangle { Layout.preferredWidth: 1; Layout.preferredHeight: row.height * 0.7; color: root.dim }
-            Meter { label: "7d"; win: root.bar ? root.bar.seven_day : null }
         }
     }
 
