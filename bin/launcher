@@ -7,6 +7,8 @@ case "$mode" in
     *) echo "usage: launcher kickoff|krunner" >&2; exit 2 ;;
 esac
 
+repo="$(dirname "$(dirname "$(readlink -f "$0")")")"
+
 shell() {
     gdbus call --session -d org.kde.plasmashell -o /PlasmaShell -m org.kde.PlasmaShell.evaluateScript "$1" >/dev/null
 }
@@ -19,6 +21,7 @@ function drop(panel, plugin) { if (panel) panel.widgets(plugin).forEach(function
 '
 
 kickoff='
+var ICON = "'"$repo/icons/launcher.svg"'";
 if (dock && !has(dock, "org.kde.plasma.kickoff")) dock.addWidget("org.kde.plasma.kickoff");
 if (dock) dock.widgets("org.kde.plasma.kickoff").forEach(function (w) {
     w.currentConfigGroup = ["General"];
@@ -26,6 +29,11 @@ if (dock) dock.widgets("org.kde.plasma.kickoff").forEach(function (w) {
     w.writeConfig("applicationsDisplay", 1);
     w.writeConfig("compactMode", true);
     w.writeConfig("switchCategoryOnHover", true);
+    w.writeConfig("alphaSort", true);
+    w.writeConfig("primaryActions", 3);
+    w.writeConfig("showActionButtonCaptions", false);
+    w.writeConfig("menuLabel", "");
+    w.writeConfig("icon", ICON);
     w.currentConfigGroup = [];
     w.writeConfig("popupWidth", 560);
     w.writeConfig("popupHeight", 520);
