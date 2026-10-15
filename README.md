@@ -7,6 +7,7 @@ My KDE Plasma 6 setup: a floating top bar, floating maximized windows, and a Cla
 | Path | What it does |
 |---|---|
 | `plasmoids/io.github.aethryl.claudebar` | Panel widget showing herdr agent states (working / blocked / idle) and Claude's 5-hour and weekly limits; click it to open a notch-style dropdown. |
+| `plasmoids/io.github.aethryl.sysbar` | Compact CPU / RAM / GPU / network meters for the top bar; click it for a notch dropdown with history graphs, per-core load and top processes. |
 | `shell-override/` | Patched copy of the Plasma desktop shell: the top bar always floats, has a tiny top gap, and reserves only its drawn height. |
 | `systemd/plasma-shell-override.service` | Rebuilds the shell override from the system copy before each plasmashell start, so Plasma updates are picked up. |
 | `kwin-scripts/floatingwindows` | Insets maximized windows by a small gap so they float like the bar. |

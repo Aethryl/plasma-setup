@@ -6,6 +6,7 @@ data="${XDG_DATA_HOME:-$HOME/.local/share}"
 
 mkdir -p "$data/plasma/plasmoids" "$data/kwin/scripts"
 ln -sfn "$repo/plasmoids/io.github.aethryl.claudebar" "$data/plasma/plasmoids/io.github.aethryl.claudebar"
+ln -sfn "$repo/plasmoids/io.github.aethryl.sysbar" "$data/plasma/plasmoids/io.github.aethryl.sysbar"
 ln -sfn "$repo/kwin-scripts/floatingwindows" "$data/kwin/scripts/floatingwindows"
 
 "$repo/shell-override/sync.sh"
