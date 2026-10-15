@@ -16,6 +16,8 @@ kwriteconfig6 --file kwinrc --group Plugins --key floatingwindowsEnabled true
 for key in DisableRoundMaximize DisableOutlineMaximize DisableRoundTile DisableOutlineTile; do
     kwriteconfig6 --file kwinrc --group Effect-shapecorners --key "$key" false
 done
+kwriteconfig6 --file kwinrc --group Effect-slidingpopups --key SlideInTime 90
+kwriteconfig6 --file kwinrc --group Effect-slidingpopups --key SlideOutTime 110
 qdbus-qt6 org.kde.KWin /KWin reconfigure 2>/dev/null || /usr/lib64/qt6/bin/qdbus org.kde.KWin /KWin reconfigure
 
 echo "Restart plasmashell to load the shell override: systemctl --user restart plasma-plasmashell"
