@@ -90,15 +90,6 @@
   "license": "own collection"
  },
  {
-  "id": "gh-jelly-astronaut",
-  "collection": "illustration",
-  "title": "Astronaut with jellyfish",
-  "source": "dharmx/walls",
-  "page": "https://github.com/dharmx/walls/blob/main/radium/a_drawing_of_an_astronaut_in_space.png",
-  "url": "https://raw.githubusercontent.com/dharmx/walls/main/radium/a_drawing_of_an_astronaut_in_space.png",
-  "license": "unclear"
- },
- {
   "id": "pd-mooncolony",
   "collection": "illustration",
   "title": "Moon Colony",
@@ -117,15 +108,6 @@
   "license": "unclear (Wallhaven upload)"
  },
  {
-  "id": "wh-x6lpzl",
-  "collection": "illustration",
-  "title": "Explorer walking toward huge machine in desert ruins",
-  "source": "Wallhaven",
-  "page": "https://wallhaven.cc/w/x6lpzl",
-  "url": "https://w.wallhaven.cc/full/x6/wallhaven-x6lpzl.png",
-  "license": "unclear (Wallhaven upload)"
- },
- {
   "id": "wh-ymvq9k",
   "collection": "illustration",
   "title": "Painted desert with distant portal tower",
@@ -133,15 +115,6 @@
   "page": "https://wallhaven.cc/w/ymvq9k",
   "url": "https://w.wallhaven.cc/full/ym/wallhaven-ymvq9k.jpg",
   "license": "unclear (Wallhaven upload)"
- },
- {
-  "id": "df-logo-wallpapers-1014683",
-  "collection": "logo-wallpapers",
-  "title": "1014683",
-  "source": "Aethryl/dotfiles",
-  "page": "https://github.com/Aethryl/dotfiles",
-  "dotfiles": "archive/ubuntu-stow/dot-background-profiles/logo-wallpapers/1014683.jpg",
-  "license": "own collection"
  },
  {
   "id": "df-logo-wallpapers-1023688",
@@ -159,15 +132,6 @@
   "source": "Aethryl/dotfiles",
   "page": "https://github.com/Aethryl/dotfiles",
   "dotfiles": "archive/ubuntu-stow/dot-background-profiles/logo-wallpapers/1098643.jpg",
-  "license": "own collection"
- },
- {
-  "id": "df-logo-wallpapers-1229229",
-  "collection": "logo-wallpapers",
-  "title": "1229229",
-  "source": "Aethryl/dotfiles",
-  "page": "https://github.com/Aethryl/dotfiles",
-  "dotfiles": "archive/ubuntu-stow/dot-background-profiles/logo-wallpapers/1229229.jpg",
   "license": "own collection"
  },
  {
@@ -360,15 +324,6 @@
   "license": "Public domain (NASA)"
  },
  {
-  "id": "pd-kepler-16b-poster",
-  "collection": "retro-futurism",
-  "title": "Kepler-16b: Where Your Shadow Always Has Company",
-  "source": "NASA/JPL Exoplanet Travel Bureau",
-  "page": "https://commons.wikimedia.org/wiki/File:Kepler-16b_39x27_CMYK-1.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Kepler-16b_39x27_CMYK-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
   "id": "pd-torus-sphere-interior-view",
   "collection": "retro-futurism",
   "title": "Stanford Torus Interior View",
@@ -420,15 +375,6 @@
   "source": "Wallhaven",
   "page": "https://wallhaven.cc/w/r2dg9q",
   "url": "https://w.wallhaven.cc/full/r2/wallhaven-r2dg9q.png",
-  "license": "unclear (Wallhaven upload)"
- },
- {
-  "id": "wh-rdyxdq",
-  "collection": "retro-futurism",
-  "title": "Retro poster astronaut over red planet",
-  "source": "Wallhaven",
-  "page": "https://wallhaven.cc/w/rdyxdq",
-  "url": "https://w.wallhaven.cc/full/rd/wallhaven-rdyxdq.jpg",
   "license": "unclear (Wallhaven upload)"
  },
  {

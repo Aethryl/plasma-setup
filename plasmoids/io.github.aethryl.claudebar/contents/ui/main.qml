@@ -13,6 +13,8 @@ PlasmoidItem {
 
     readonly property string script: Qt.resolvedUrl("../code/claudebar.py").toString().replace("file://", "")
     readonly property string command: "python3 '" + script + "'"
+    readonly property string costCommand: "python3 '" + Qt.resolvedUrl("../code/costs.py").toString().replace("file://", "") + "'"
+    property var costs: null
     property var bar: null
     property real now: Date.now() / 1000
     property real compactWidth: Kirigami.Units.gridUnit * 20
@@ -89,6 +91,12 @@ PlasmoidItem {
         engine: "executable"
         onNewData: (source, data) => {
             disconnectSource(source)
+            if (source === root.costCommand) {
+                try {
+                    root.costs = JSON.parse(data["stdout"])
+                } catch (e) {}
+                return
+            }
             if (source !== root.command)
                 return
             try {
@@ -104,6 +112,24 @@ PlasmoidItem {
         repeat: true
         triggeredOnStart: true
         onTriggered: executable.connectSource(root.command)
+    }
+
+    Timer {
+        interval: 60000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: executable.connectSource(root.costCommand)
+    }
+
+    function money(value) {
+        if (value === undefined || value === null)
+            return "–"
+        return value >= 1000 ? "$" + (value / 1000).toFixed(1) + "k" : "$" + Math.round(value)
+    }
+
+    function modelName(model) {
+        return model.replace(/^claude-/, "").replace(/-\d{8}$/, "").replace(/-(\d+)-(\d+)$/, " $1.$2").replace(/-(\d+)$/, " $1")
     }
 
     component Dot: Rectangle {
@@ -178,6 +204,103 @@ PlasmoidItem {
         PlasmaComponents.Label {
             text: value === undefined || value === null ? "–" : value
             color: value ? Kirigami.Theme.textColor : root.dim
+        }
+    }
+
+    component Costs: ColumnLayout {
+        spacing: Kirigami.Units.smallSpacing
+        readonly property var daily: root.costs ? root.costs.daily : []
+        readonly property real peak: Math.max(1, ...daily.map(d => d.cost))
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: Kirigami.Units.smallSpacing
+            PlasmaComponents.Label {
+                text: "Cost"
+                font.weight: Font.DemiBold
+            }
+            PlasmaComponents.Label {
+                Layout.fillWidth: true
+                text: "API-price estimate"
+                color: root.dim
+                font.pointSize: Kirigami.Theme.smallFont.pointSize
+                elide: Text.ElideRight
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: Kirigami.Units.gridUnit
+
+            Repeater {
+                model: [
+                    { label: "Today", value: root.costs ? root.costs.today : null },
+                    { label: "7 days", value: root.costs ? root.costs.week : null },
+                    { label: "30 days", value: root.costs ? root.costs.month : null }
+                ]
+                ColumnLayout {
+                    spacing: 0
+                    PlasmaComponents.Label {
+                        text: root.money(modelData.value)
+                        font.pointSize: Kirigami.Theme.defaultFont.pointSize * 1.2
+                        font.weight: Font.DemiBold
+                    }
+                    PlasmaComponents.Label {
+                        text: modelData.label
+                        color: root.dim
+                        font.pointSize: Kirigami.Theme.smallFont.pointSize
+                    }
+                }
+            }
+
+            Item { Layout.fillWidth: true }
+
+            Row {
+                id: week
+                readonly property real dpr: Screen.devicePixelRatio || 1
+                readonly property real cell: Math.max(2, Math.round(Kirigami.Units.gridUnit * 0.2 * dpr)) / dpr
+                readonly property real gap: Math.max(1, Math.round(dpr)) / dpr
+                readonly property int levels: 8
+                Layout.alignment: Qt.AlignBottom
+                spacing: gap * 2
+                Repeater {
+                    model: daily
+                    Column {
+                        readonly property int lit: modelData.cost > 0 ? Math.max(1, Math.round(modelData.cost / peak * week.levels)) : 0
+                        readonly property bool isToday: index === daily.length - 1
+                        spacing: week.gap
+                        Repeater {
+                            model: week.levels
+                            Rectangle {
+                                width: week.cell * 2 + week.gap
+                                height: week.cell
+                                color: week.levels - index <= lit
+                                    ? (isToday ? Kirigami.Theme.highlightColor : Qt.alpha(Kirigami.Theme.textColor, 0.55))
+                                    : Qt.alpha(Kirigami.Theme.textColor, 0.08)
+                            }
+                        }
+                        PlasmaComponents.Label {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: new Date(modelData.day + "T12:00:00").toLocaleString(Qt.locale(), "ddd").slice(0, 1)
+                            color: root.dim
+                            font.pointSize: Kirigami.Theme.smallFont.pointSize * 0.85
+                        }
+                    }
+                }
+            }
+        }
+
+        Flow {
+            Layout.fillWidth: true
+            spacing: Kirigami.Units.largeSpacing
+            Repeater {
+                model: root.costs ? root.costs.models.filter(m => m.cost >= 0.5).slice(0, 4) : []
+                PlasmaComponents.Label {
+                    text: root.modelName(modelData.model) + " " + root.money(modelData.cost)
+                    color: root.dim
+                    font.pointSize: Kirigami.Theme.smallFont.pointSize
+                }
+            }
         }
     }
 
@@ -359,6 +482,7 @@ PlasmoidItem {
 
     onDroopedChanged: {
         if (drooped) {
+            executable.connectSource(root.costCommand)
             droop.visible = true
             droop.requestActivate()
             reveal.to = 1
@@ -447,6 +571,18 @@ PlasmoidItem {
                     }
 
                     Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 1
+                        color: root.hairline
+                    }
+
+                    Costs {
+                        Layout.fillWidth: true
+                        visible: !!root.costs
+                    }
+
+                    Rectangle {
+                        visible: !!root.costs
                         Layout.fillWidth: true
                         Layout.preferredHeight: 1
                         color: root.hairline
