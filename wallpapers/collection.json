@@ -108,15 +108,6 @@
   "license": "unclear"
  },
  {
-  "id": "gh-purple-sky",
-  "collection": "illustration",
-  "title": "Purple cloud sky",
-  "source": "neonvoidx/pics",
-  "page": "https://github.com/neonvoidx/pics/blob/master/ultrawide/purple-sky.jpg",
-  "url": "https://raw.githubusercontent.com/neonvoidx/pics/master/ultrawide/purple-sky.jpg",
-  "license": "unclear"
- },
- {
   "id": "pd-mooncolony",
   "collection": "illustration",
   "title": "Moon Colony",
@@ -132,15 +123,6 @@
   "source": "Wallhaven",
   "page": "https://wallhaven.cc/w/p9gr2p",
   "url": "https://w.wallhaven.cc/full/p9/wallhaven-p9gr2p.jpg",
-  "license": "unclear (Wallhaven upload)"
- },
- {
-  "id": "wh-q22k27",
-  "collection": "illustration",
-  "title": "Giant ring structure over reflective lake at sunset",
-  "source": "Wallhaven",
-  "page": "https://wallhaven.cc/w/q22k27",
-  "url": "https://w.wallhaven.cc/full/q2/wallhaven-q22k27.jpg",
   "license": "unclear (Wallhaven upload)"
  },
  {
@@ -180,15 +162,6 @@
   "license": "own collection"
  },
  {
-  "id": "df-logo-wallpapers-1046107",
-  "collection": "logo-wallpapers",
-  "title": "1046107",
-  "source": "Aethryl/dotfiles",
-  "page": "https://github.com/Aethryl/dotfiles",
-  "dotfiles": "archive/ubuntu-stow/dot-background-profiles/logo-wallpapers/1046107.jpg",
-  "license": "own collection"
- },
- {
   "id": "df-logo-wallpapers-1098643",
   "collection": "logo-wallpapers",
   "title": "1098643",
@@ -204,15 +177,6 @@
   "source": "Aethryl/dotfiles",
   "page": "https://github.com/Aethryl/dotfiles",
   "dotfiles": "archive/ubuntu-stow/dot-background-profiles/logo-wallpapers/1229229.jpg",
-  "license": "own collection"
- },
- {
-  "id": "df-logo-wallpapers-1349061",
-  "collection": "logo-wallpapers",
-  "title": "1349061",
-  "source": "Aethryl/dotfiles",
-  "page": "https://github.com/Aethryl/dotfiles",
-  "dotfiles": "archive/ubuntu-stow/dot-background-profiles/logo-wallpapers/1349061.jpeg",
   "license": "own collection"
  },
  {
@@ -315,15 +279,6 @@
   "license": "unclear (Wallhaven upload)"
  },
  {
-  "id": "wh-95z881",
-  "collection": "pixel-art",
-  "title": "Pixel rooftop city with white birds",
-  "source": "Wallhaven",
-  "page": "https://wallhaven.cc/w/95z881",
-  "url": "https://w.wallhaven.cc/full/95/wallhaven-95z881.png",
-  "license": "unclear (Wallhaven upload)"
- },
- {
   "id": "wh-9dvl38",
   "collection": "pixel-art",
   "title": "Pixel cyber city on lavender sky",
@@ -339,15 +294,6 @@
   "source": "Wallhaven",
   "page": "https://wallhaven.cc/w/9m8q31",
   "url": "https://w.wallhaven.cc/full/9m/wallhaven-9m8q31.jpg",
-  "license": "unclear (Wallhaven upload)"
- },
- {
-  "id": "wh-dpe19l",
-  "collection": "pixel-art",
-  "title": "Pixel pagoda by waterfall",
-  "source": "Wallhaven",
-  "page": "https://wallhaven.cc/w/dpe19l",
-  "url": "https://w.wallhaven.cc/full/dp/wallhaven-dpe19l.jpg",
   "license": "unclear (Wallhaven upload)"
  },
  {
@@ -369,15 +315,6 @@
   "license": "unclear (Wallhaven upload)"
  },
  {
-  "id": "gh-mars-dome",
-  "collection": "retro-futurism",
-  "title": "Mars colony dome",
-  "source": "dharmx/walls",
-  "page": "https://github.com/dharmx/walls/blob/main/chillop/a_cartoon_of_a_space_ship_and_a_man_standing_on_a_rocky_surface.jpg",
-  "url": "https://raw.githubusercontent.com/dharmx/walls/main/chillop/a_cartoon_of_a_space_ship_and_a_man_standing_on_a_rocky_surface.jpg",
-  "license": "unclear"
- },
- {
   "id": "gh-wh-neon-canyon",
   "collection": "retro-futurism",
   "title": "Neon canyon spires",
@@ -394,15 +331,6 @@
   "page": "https://github.com/neonvoidx/pics/blob/master/ultrawide/wallhaven-jevw55.jpg",
   "url": "https://raw.githubusercontent.com/neonvoidx/pics/master/ultrawide/wallhaven-jevw55.jpg",
   "license": "unclear"
- },
- {
-  "id": "pd-jpl-visions-of-the-future-earth",
-  "collection": "retro-futurism",
-  "title": "Earth: Your Oasis in Space",
-  "source": "NASA/JPL Visions of the Future",
-  "page": "https://commons.wikimedia.org/wiki/File:JPL_Visions_of_the_Future,_Earth.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/JPL_Visions_of_the_Future%2C_Earth.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
  },
  {
   "id": "pd-jpl-visions-of-the-future-enceladus",
@@ -663,15 +591,6 @@
   "source": "NASA Ames/JPL exoplanet art",
   "page": "https://commons.wikimedia.org/wiki/File:Kepler-62f_with_62e_as_Morning_Star.jpg",
   "url": "https://upload.wikimedia.org/wikipedia/commons/7/77/Kepler-62f_with_62e_as_Morning_Star.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
-  "id": "pd-pia23690-exoplanet-kepler1649c-20200415",
-  "collection": "space",
-  "title": "Kepler-1649c",
-  "source": "NASA/Ames exoplanet art",
-  "page": "https://commons.wikimedia.org/wiki/File:PIA23690-Exoplanet-Kepler1649c-20200415.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/4/41/PIA23690-Exoplanet-Kepler1649c-20200415.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
   "license": "Public domain (NASA)"
  },
  {

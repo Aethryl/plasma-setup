@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import random
+import re
 import shutil
 import subprocess
 import sys
@@ -31,6 +32,7 @@ USER_AGENT = "wallrot/1.0 (https://github.com/Aethryl/plasma-customizations)"
 WIKIMEDIA = "https://upload.wikimedia.org/wikipedia/commons/"
 WIKIMEDIA_WIDTHS = (3840, 2560)
 MIN_SIZE = (2560, 1440)
+COLLECTION_NAME = re.compile(r"^[\w][\w .-]{0,47}$")
 
 DEFAULTS = {
     "enabled": True,
@@ -62,6 +64,37 @@ def manifest() -> dict[str, dict]:
         return {item["id"]: item for item in json.loads(MANIFEST.read_text())}
     except (OSError, ValueError):
         return {}
+
+
+def save_manifest(items: dict[str, dict]) -> None:
+    ordered = sorted(items.values(), key=lambda item: (item["collection"], item["id"]))
+    tmp = MANIFEST.with_suffix(".tmp")
+    tmp.write_text(json.dumps(ordered, indent=1, ensure_ascii=False) + "\n")
+    tmp.replace(MANIFEST)
+
+
+def update_manifest(ids: set[str], collection: str | None) -> None:
+    items = manifest()
+    if not items or not ids & items.keys():
+        return
+    for key in ids & items.keys():
+        if collection is None:
+            del items[key]
+        else:
+            items[key]["collection"] = collection
+    save_manifest(items)
+
+
+def collections() -> list[str]:
+    if not LIBRARY.is_dir():
+        return []
+    return sorted(path.name for path in LIBRARY.iterdir() if path.is_dir())
+
+
+def valid_name(name: str) -> str:
+    if name == "all" or not COLLECTION_NAME.match(name):
+        raise SystemExit(f"invalid collection name: {name!r}")
+    return name
 
 
 def library() -> dict[str, Path]:
@@ -109,7 +142,7 @@ def advance(state: dict) -> str | None:
 def status(state: dict) -> dict:
     images = library()
     meta = manifest()
-    counts: dict[str, int] = {}
+    counts: dict[str, int] = dict.fromkeys(collections(), 0)
     for key, path in images.items():
         if key not in state["excluded"]:
             counts[path.parent.name] = counts.get(path.parent.name, 0) + 1
@@ -136,6 +169,51 @@ def status(state: dict) -> dict:
         "total": sum(counts.values()),
         "excluded": len(state["excluded"]),
     }
+
+
+def listing(state: dict) -> dict:
+    meta = manifest()
+    excluded = set(state["excluded"])
+    return {
+        "collections": collections(),
+        "images": [
+            {
+                "id": key,
+                "title": meta.get(key, {}).get("title") or key,
+                "collection": path.parent.name,
+                "path": str(path),
+                "excluded": key in excluded,
+                "current": key == state["current"],
+                "source": meta.get(key, {}).get("source"),
+                "page": meta.get(key, {}).get("page"),
+            }
+            for key, path in images_sorted()
+        ],
+    }
+
+
+def images_sorted() -> list[tuple[str, Path]]:
+    return sorted(library().items(), key=lambda kv: (kv[1].parent.name, kv[0]))
+
+
+def delete(state: dict, keys: set[str]) -> None:
+    images = library()
+    for key in keys:
+        if key in images:
+            trash(images[key])
+    state["deleted"] = sorted(set(state["deleted"]) | keys)
+    state["excluded"] = [k for k in state["excluded"] if k not in keys]
+    update_manifest(keys, None)
+
+
+def move(keys: set[str], collection: str) -> None:
+    images = library()
+    folder = LIBRARY / collection
+    folder.mkdir(parents=True, exist_ok=True)
+    for key in keys:
+        if key in images:
+            images[key].rename(folder / images[key].name)
+    update_manifest(keys, collection)
 
 
 def trash(path: Path) -> None:
@@ -252,52 +330,85 @@ def fetch(state: dict) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(prog="wallrot")
     sub = parser.add_subparsers(dest="command", required=True)
-    sub.add_parser("status")
-    sub.add_parser("next")
-    sub.add_parser("fetch")
-    sub.add_parser("on")
-    sub.add_parser("off")
+    for name in ("status", "list", "next", "fetch", "on", "off"):
+        sub.add_parser(name)
     sub.add_parser("collection").add_argument("name")
     sub.add_parser("interval").add_argument("minutes", type=int)
-    for name in ("exclude", "delete"):
-        sub.add_parser(name).add_argument("id", nargs="?")
-    sub.add_parser("include").add_argument("id")
+    for name in ("exclude", "include", "delete"):
+        sub.add_parser(name).add_argument("ids", nargs="*")
+    move_parser = sub.add_parser("move")
+    move_parser.add_argument("collection")
+    move_parser.add_argument("ids", nargs="+")
+    sub.add_parser("mkcol").add_argument("name")
+    rename_parser = sub.add_parser("rename")
+    rename_parser.add_argument("old")
+    rename_parser.add_argument("new")
+    rmcol_parser = sub.add_parser("rmcol")
+    rmcol_parser.add_argument("name")
+    rmcol_parser.add_argument("--into", help="move images here instead of trashing")
     args = parser.parse_args()
 
     state = load_state()
     command = args.command
     if command == "fetch":
         fetch(state)
-    elif command == "next":
+        return
+    if command == "list":
+        print(json.dumps(listing(state)))
+        return
+    current = state["current"]
+    if command == "next":
         advance(state)
     elif command in ("on", "off"):
         state["enabled"] = command == "on"
         if state["enabled"]:
             advance(state)
     elif command == "collection":
-        state["collection"] = args.name
+        state["collection"] = args.name if args.name == "all" else valid_name(args.name)
         state["queue"] = []
         advance(state)
     elif command == "interval":
         state["interval"] = max(1, args.minutes)
-    elif command == "include":
-        state["excluded"] = [key for key in state["excluded"] if key != args.id]
-    elif command in ("exclude", "delete"):
-        key = args.id or state["current"]
-        if key:
-            if command == "exclude":
-                state["excluded"] = sorted(set(state["excluded"]) | {key})
-            else:
-                path = library().get(key)
-                if path:
-                    trash(path)
-                state["deleted"] = sorted(set(state["deleted"]) | {key})
-                state["excluded"] = [k for k in state["excluded"] if k != key]
-            if key == state["current"]:
-                advance(state)
+    elif command in ("exclude", "include", "delete"):
+        keys = set(args.ids) or ({current} if current else set())
+        if command == "exclude":
+            state["excluded"] = sorted(set(state["excluded"]) | keys)
+        elif command == "include":
+            state["excluded"] = [k for k in state["excluded"] if k not in keys]
+        else:
+            delete(state, keys)
+        if current in keys and command != "include":
+            advance(state)
+    elif command == "move":
+        move(set(args.ids), valid_name(args.collection))
+    elif command == "mkcol":
+        (LIBRARY / valid_name(args.name)).mkdir(parents=True, exist_ok=True)
+    elif command == "rename":
+        old, new = valid_name(args.old), valid_name(args.new)
+        if (LIBRARY / new).exists():
+            raise SystemExit(f"collection exists: {new}")
+        keys = {key for key, path in library().items() if path.parent.name == old}
+        (LIBRARY / old).rename(LIBRARY / new)
+        update_manifest(keys, new)
+        if state["collection"] == old:
+            state["collection"] = new
+    elif command == "rmcol":
+        name = valid_name(args.name)
+        keys = {key for key, path in library().items() if path.parent.name == name}
+        if args.into:
+            move(keys, valid_name(args.into))
+        else:
+            delete(state, keys)
+        folder = LIBRARY / name
+        if folder.is_dir() and not any(folder.iterdir()):
+            folder.rmdir()
+        if state["collection"] == name:
+            state["collection"] = "all"
+            state["queue"] = []
+        if current in keys and not args.into:
+            advance(state)
     save_state(state)
-    if command != "fetch":
-        print(json.dumps(status(state)))
+    print(json.dumps(status(state)))
 
 
 if __name__ == "__main__":

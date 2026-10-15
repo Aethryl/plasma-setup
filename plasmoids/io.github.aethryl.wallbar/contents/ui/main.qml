@@ -11,14 +11,19 @@ PlasmoidItem {
     id: root
 
     readonly property string wallrot: "w=\"$HOME/.local/bin/wallrot\"; [ -x \"$w\" ] || w=wallrot; \"$w\""
-    readonly property string statusCommand: command("status")
+    readonly property bool inPanel: Plasmoid.formFactor === PlasmaCore.Types.Horizontal || Plasmoid.formFactor === PlasmaCore.Types.Vertical
+    readonly property bool windowed: Plasmoid.formFactor === PlasmaCore.Types.Planar || Plasmoid.location === PlasmaCore.Types.Floating
     property var wall: null
+    property var library: null
+    property string libraryText: ""
     property bool failed: false
     property bool started: false
     property real compactWidth: Kirigami.Units.gridUnit * 6
     property Item compactItem: null
     property bool drooped: false
     property bool deleteArmed: false
+    property var pending: ({})
+    property int serial: 0
 
     readonly property real ear: Kirigami.Units.gridUnit * 0.7
     readonly property real bottomRadius: Kirigami.Units.gridUnit * 1.1
@@ -35,9 +40,19 @@ PlasmoidItem {
     readonly property color dim: Kirigami.Theme.disabledTextColor
     readonly property color hairline: Qt.alpha(Kirigami.Theme.textColor, 0.1)
 
-    preferredRepresentation: compactRepresentation
-    fullRepresentation: Item {}
-    Plasmoid.backgroundHints: "NoBackground"
+    preferredRepresentation: windowed ? fullRepresentation : compactRepresentation
+    fullRepresentation: Manager {
+        app: root
+    }
+    Plasmoid.backgroundHints: windowed ? PlasmaCore.Types.DefaultBackground : PlasmaCore.Types.NoBackground
+
+    Plasmoid.contextualActions: [
+        PlasmaCore.Action {
+            text: "Open wallpaper manager"
+            icon.name: "preferences-desktop-wallpaper"
+            onTriggered: root.openManager()
+        }
+    ]
 
     toolTipMainText: ""
     toolTipSubText: ""
@@ -50,13 +65,61 @@ PlasmoidItem {
         return root.wallrot + " " + args
     }
 
+    function exec(args, done) {
+        root.serial += 1
+        const source = command(args) + " #" + root.serial
+        if (done)
+            root.pending[source] = done
+        executable.connectSource(source)
+    }
+
+    function refresh() {
+        exec("status", result => {
+            if (!result.status) {
+                root.wall = null
+                root.failed = true
+            }
+        })
+        if (root.windowed)
+            exec("list")
+    }
+
     function run(args) {
-        executable.connectSource(command(args))
+        exec(args, result => {
+            if (!result.status)
+                root.refresh()
+            else if (root.windowed)
+                exec("list")
+        })
+    }
+
+    function mutate(args, done) {
+        exec(args, result => {
+            root.refresh()
+            if (done)
+                done(result)
+        })
     }
 
     function advance(args) {
-        rotation.restart()
+        if (rotation.running)
+            rotation.restart()
         run(args)
+    }
+
+    function openManager() {
+        root.drooped = false
+        executable.connectSource("setsid -f plasmawindowed io.github.aethryl.wallbar >/dev/null 2>&1")
+    }
+
+    function applyStatus(parsed) {
+        root.wall = parsed
+        root.failed = false
+        if (!root.started) {
+            root.started = true
+            if (root.inPanel && parsed.enabled && !parsed.current && parsed.total > 0)
+                root.advance("next")
+        }
     }
 
     function imageUrl(path) {
@@ -77,24 +140,32 @@ PlasmoidItem {
         engine: "executable"
         onNewData: (source, data) => {
             disconnectSource(source)
-            const lines = (data["stdout"] || "").trim().split("\n")
+            const done = root.pending[source]
+            delete root.pending[source]
+            const stdout = (data["stdout"] || "").trim()
+            const lines = stdout.split("\n")
             let parsed = null
             try {
                 parsed = JSON.parse(lines[lines.length - 1])
             } catch (e) {}
-            if (parsed && typeof parsed === "object" && Array.isArray(parsed.collections)) {
-                root.wall = parsed
-                root.failed = false
-                if (!root.started) {
-                    root.started = true
-                    if (parsed.enabled && !parsed.current && parsed.total > 0)
-                        root.advance("next")
+            if (parsed && typeof parsed === "object" && Array.isArray(parsed.images)) {
+                if (stdout !== root.libraryText) {
+                    root.libraryText = stdout
+                    root.library = parsed
                 }
-            } else if (source === root.statusCommand) {
-                root.wall = null
-                root.failed = true
+                parsed = null
+            } else if (parsed && typeof parsed === "object" && Array.isArray(parsed.collections) && "enabled" in parsed) {
+                root.applyStatus(parsed)
             } else {
-                connectSource(root.statusCommand)
+                parsed = null
+            }
+            if (done) {
+                const errors = (data["stderr"] || "").trim().split("\n").filter(line => line.trim() !== "")
+                done({
+                    ok: data["exit code"] === 0,
+                    status: parsed,
+                    error: errors.length ? errors[errors.length - 1] : (data["exit code"] === 0 ? "" : "wallrot failed")
+                })
             }
         }
     }
@@ -104,13 +175,13 @@ PlasmoidItem {
         running: true
         repeat: true
         triggeredOnStart: true
-        onTriggered: executable.connectSource(root.statusCommand)
+        onTriggered: root.refresh()
     }
 
     Timer {
         id: rotation
         interval: Math.max(1, root.wall ? root.wall.interval : 30) * 60000
-        running: root.rotating
+        running: root.inPanel && root.rotating
         repeat: true
         onTriggered: root.run("next")
     }
@@ -444,6 +515,12 @@ PlasmoidItem {
                                     }
                                 }
                             }
+                        }
+
+                        Action {
+                            text: "Manage…"
+                            icon: "configure"
+                            onClicked: root.openManager()
                         }
 
                         Rectangle {
