@@ -1,5 +1,5 @@
 const GAP = readConfig("gap", 6);
-const EXCLUDE = String(readConfig("exclude", "app.zen_browser.zen,zen"))
+const EXCLUDE = String(readConfig("exclude", ""))
     .split(",").map(name => name.trim().toLowerCase()).filter(Boolean);
 
 function near(a, b) {
