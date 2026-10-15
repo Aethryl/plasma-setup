@@ -4,11 +4,8 @@ set -euo pipefail
 repo="$(dirname "$(readlink -f "$0")")"
 data="${XDG_DATA_HOME:-$HOME/.local/share}"
 
-mkdir -p "$data/plasma/plasmoids" "$data/kwin/scripts" "$data/aurorae/themes" "$data/color-schemes" \
+mkdir -p "$data/kwin/scripts" "$data/aurorae/themes" "$data/color-schemes" \
     "$data/applications" "$HOME/.local/bin"
-ln -sfn "$repo/plasmoids/io.github.aethryl.claudebar" "$data/plasma/plasmoids/io.github.aethryl.claudebar"
-ln -sfn "$repo/plasmoids/io.github.aethryl.sysbar" "$data/plasma/plasmoids/io.github.aethryl.sysbar"
-ln -sfn "$repo/plasmoids/io.github.aethryl.mural" "$data/plasma/plasmoids/io.github.aethryl.mural"
 ln -sfn "$repo/kwin-scripts/floatingwindows" "$data/kwin/scripts/floatingwindows"
 
 for variant in Dark Light; do
@@ -26,7 +23,6 @@ done
 kwriteconfig6 --file kdeglobals --group KDE --key DefaultDarkLookAndFeel io.github.aethryl.everforest-dark
 kwriteconfig6 --file kdeglobals --group KDE --key DefaultLightLookAndFeel io.github.aethryl.everforest-light
 ln -sfn "$repo/bin/everforest" "$HOME/.local/bin/everforest"
-ln -sfn "$repo/bin/mural" "$HOME/.local/bin/mural"
 ln -sfn "$repo/applications/everforest-toggle.desktop" "$data/applications/everforest-toggle.desktop"
 kwriteconfig6 --file kglobalshortcutsrc --group services --group everforest-toggle.desktop --key _launch "Meta+Shift+L"
 
