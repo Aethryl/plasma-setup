@@ -49,13 +49,13 @@ PlasmoidItem {
     function timeLeft(resetsAt) {
         if (!resetsAt)
             return ""
-        const s = Math.max(0, Math.floor(resetsAt - now))
-        const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60)
-        if (d > 0)
-            return d + "d" + h + "h"
-        if (h > 0)
-            return h + "h" + String(m).padStart(2, "0") + "m"
-        return m + "m"
+        const s = Math.max(0, resetsAt - now)
+        const half = v => String(Math.round(v * 2) / 2)
+        if (s >= 86400)
+            return half(s / 86400) + "d"
+        if (s >= 3600)
+            return half(s / 3600) + "h"
+        return Math.max(1, Math.round(s / 60)) + "m"
     }
 
     function resetClock(resetsAt) {
@@ -324,6 +324,16 @@ PlasmoidItem {
                 id: row
                 anchors.centerIn: parent
                 spacing: Kirigami.Units.largeSpacing
+
+                Image {
+                    readonly property real dpr: Screen.devicePixelRatio || 1
+                    readonly property int dot: Math.max(1, Math.round(Kirigami.Units.gridUnit * 0.5 * dpr / 6))
+                    Layout.preferredHeight: dot * 6 / dpr
+                    Layout.preferredWidth: dot * 18 / dpr
+                    source: Qt.resolvedUrl("../images/clawd.svg")
+                    sourceSize: Qt.size(Layout.preferredWidth, Layout.preferredHeight)
+                    smooth: false
+                }
 
                 RowLayout {
                     spacing: Kirigami.Units.smallSpacing * 2
