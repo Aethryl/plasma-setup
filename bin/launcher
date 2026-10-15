@@ -3,8 +3,8 @@ set -euo pipefail
 
 mode="${1:-}"
 case "$mode" in
-    kickoff|krunner|notch) ;;
-    *) echo "usage: launcher kickoff|krunner|notch" >&2; exit 2 ;;
+    kickoff|krunner) ;;
+    *) echo "usage: launcher kickoff|krunner" >&2; exit 2 ;;
 esac
 
 shell() {
@@ -34,17 +34,13 @@ if (dock) dock.widgets("org.kde.plasma.kickoff").forEach(function (w) {
 
 case "$mode" in
     kickoff)
-        shell "$panels drop(top, \"io.github.aethryl.launcher\"); $kickoff"
+        shell "$panels $kickoff"
         kwriteconfig6 --file kwinrc --group ModifierOnlyShortcuts --key Meta --delete
         ;;
     krunner)
         shell "$panels $kickoff"
         kwriteconfig6 --file krunnerrc --group General --key FreeFloating true
         kwriteconfig6 --file kwinrc --group ModifierOnlyShortcuts --key Meta "org.kde.krunner,/App,,toggleDisplay"
-        ;;
-    notch)
-        shell "$panels drop(dock, \"org.kde.plasma.kickoff\"); if (top && !has(top, \"io.github.aethryl.launcher\")) top.addWidget(\"io.github.aethryl.launcher\");"
-        kwriteconfig6 --file kwinrc --group ModifierOnlyShortcuts --key Meta --delete
         ;;
 esac
 
