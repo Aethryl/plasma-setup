@@ -267,6 +267,53 @@ PlasmoidItem {
         }
     }
 
+    readonly property string hideIcon: Qt.resolvedUrl("../images/eye-off.svg").toString()
+
+    component IconAction: Rectangle {
+        id: iconAction
+        property string icon
+        property string label
+        property string hint
+        property color tone: Kirigami.Theme.textColor
+        property bool alert: false
+        signal clicked()
+        implicitWidth: iconActionRow.implicitWidth + Kirigami.Units.smallSpacing * 3
+        implicitHeight: Kirigami.Units.iconSizes.small + Kirigami.Units.smallSpacing * 3
+        radius: Kirigami.Units.cornerRadius
+        color: alert ? tone : Qt.alpha(tone, iconActionHover.containsMouse ? 0.3 : 0.15)
+        Behavior on color { ColorAnimation { duration: Kirigami.Units.shortDuration } }
+
+        RowLayout {
+            id: iconActionRow
+            anchors.centerIn: parent
+            spacing: Kirigami.Units.smallSpacing
+            Kirigami.Icon {
+                source: iconAction.icon
+                implicitWidth: Kirigami.Units.iconSizes.small
+                implicitHeight: Kirigami.Units.iconSizes.small
+                color: iconAction.alert ? Kirigami.Theme.highlightedTextColor : iconAction.tone
+                isMask: true
+            }
+            PlasmaComponents.Label {
+                visible: text !== ""
+                text: iconAction.label
+                color: Kirigami.Theme.highlightedTextColor
+            }
+        }
+        MouseArea {
+            id: iconActionHover
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: iconAction.clicked()
+        }
+        PlasmaComponents.ToolTip {
+            text: iconAction.hint
+            visible: iconActionHover.containsMouse && text !== ""
+            delay: Kirigami.Units.toolTipDelay
+        }
+    }
+
     component Caption: PlasmaComponents.Label {
         color: root.dim
         font.pointSize: Kirigami.Theme.smallFont.pointSize
@@ -440,23 +487,18 @@ PlasmoidItem {
                                     elide: Text.ElideRight
                                 }
                             }
-                            PlasmaComponents.ToolButton {
-                                icon.name: "view-hidden"
-                                display: PlasmaComponents.AbstractButton.IconOnly
-                                text: "Remove from rotation"
-                                PlasmaComponents.ToolTip.text: text
-                                PlasmaComponents.ToolTip.visible: hovered
-                                PlasmaComponents.ToolTip.delay: Kirigami.Units.toolTipDelay
+                            IconAction {
+                                icon: root.hideIcon
+                                tone: Kirigami.Theme.neutralTextColor
+                                hint: "Remove from rotation"
                                 onClicked: root.advance("exclude " + root.quote(root.current.id))
                             }
-                            PlasmaComponents.ToolButton {
-                                icon.name: "edit-delete"
-                                icon.color: root.deleteArmed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
-                                display: root.deleteArmed ? PlasmaComponents.AbstractButton.TextBesideIcon : PlasmaComponents.AbstractButton.IconOnly
-                                text: root.deleteArmed ? "Delete?" : "Delete"
-                                PlasmaComponents.ToolTip.text: root.deleteArmed ? "Click again to move it to the trash" : "Delete this wallpaper"
-                                PlasmaComponents.ToolTip.visible: hovered
-                                PlasmaComponents.ToolTip.delay: Kirigami.Units.toolTipDelay
+                            IconAction {
+                                icon: "edit-delete"
+                                tone: Kirigami.Theme.negativeTextColor
+                                alert: root.deleteArmed
+                                label: root.deleteArmed ? "Delete?" : ""
+                                hint: root.deleteArmed ? "Click again to move it to the trash" : "Delete this wallpaper"
                                 onClicked: {
                                     if (root.deleteArmed) {
                                         root.deleteArmed = false
@@ -560,7 +602,7 @@ PlasmoidItem {
                             }
                             Action {
                                 text: "Remove"
-                                icon: "view-hidden"
+                                icon: root.hideIcon
                                 tone: Kirigami.Theme.neutralTextColor
                                 enabled: !!root.upNext
                                 onClicked: root.run("exclude " + root.quote(root.upNext.id))

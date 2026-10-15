@@ -650,7 +650,8 @@ Rectangle {
                             },
                             Kirigami.Action {
                                 text: "Exclude"
-                                icon.name: "view-hidden"
+                                icon.source: Qt.resolvedUrl("../images/eye-off.svg")
+                                icon.color: Kirigami.Theme.textColor
                                 enabled: manager.selectionCount > 0
                                 onTriggered: manager.act("exclude " + manager.selectedArgs(), false)
                             },
