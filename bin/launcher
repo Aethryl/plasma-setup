@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mode="${1:-}"
+case "$mode" in
+    kickoff|krunner|notch) ;;
+    *) echo "usage: launcher kickoff|krunner|notch" >&2; exit 2 ;;
+esac
+
+shell() {
+    gdbus call --session -d org.kde.plasmashell -o /PlasmaShell -m org.kde.PlasmaShell.evaluateScript "$1" >/dev/null
+}
+
+panels='
+var top = panels().filter(function (p) { return p.location === "top"; })[0];
+var dock = panels().filter(function (p) { return p.location === "bottom"; })[0];
+function has(panel, plugin) { return panel && panel.widgets(plugin).length > 0; }
+function drop(panel, plugin) { if (panel) panel.widgets(plugin).forEach(function (w) { w.remove(); }); }
+'
+
+kickoff='
+if (dock && !has(dock, "org.kde.plasma.kickoff")) dock.addWidget("org.kde.plasma.kickoff");
+if (dock) dock.widgets("org.kde.plasma.kickoff").forEach(function (w) {
+    w.currentConfigGroup = ["General"];
+    w.writeConfig("favoritesDisplay", 0);
+    w.writeConfig("applicationsDisplay", 1);
+    w.writeConfig("compactMode", true);
+    w.writeConfig("switchCategoryOnHover", true);
+    w.currentConfigGroup = [];
+    w.writeConfig("popupWidth", 560);
+    w.writeConfig("popupHeight", 520);
+});
+'
+
+case "$mode" in
+    kickoff)
+        shell "$panels drop(top, \"io.github.aethryl.launcher\"); $kickoff"
+        kwriteconfig6 --file kwinrc --group ModifierOnlyShortcuts --key Meta --delete
+        ;;
+    krunner)
+        shell "$panels $kickoff"
+        kwriteconfig6 --file krunnerrc --group General --key FreeFloating true
+        kwriteconfig6 --file kwinrc --group ModifierOnlyShortcuts --key Meta "org.kde.krunner,/App,,toggleDisplay"
+        ;;
+    notch)
+        shell "$panels drop(dock, \"org.kde.plasma.kickoff\"); if (top && !has(top, \"io.github.aethryl.launcher\")) top.addWidget(\"io.github.aethryl.launcher\");"
+        kwriteconfig6 --file kwinrc --group ModifierOnlyShortcuts --key Meta --delete
+        ;;
+esac
+
+gdbus call --session -d org.kde.KWin -o /KWin -m org.kde.KWin.reconfigure >/dev/null
+echo "Meta now opens: $mode"

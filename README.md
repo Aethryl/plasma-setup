@@ -12,11 +12,12 @@ Related repos, all applied by chezmoi from [dotfiles](https://github.com/Aethryl
 
 | Path | What it does |
 |---|---|
-| `shell-override/` | Patched copy of the Plasma desktop shell: the top bar always floats, has a tiny top gap, and reserves only its drawn height. |
+| `shell-override/` | Patched copy of the Plasma desktop shell: floating panels (the top bar and the dock) get the bar's tinted fill, hairline border and rounded corners; the top bar always floats, has a tiny top gap, and reserves only its drawn height. |
 | `systemd/plasma-shell-override.service` | Rebuilds the shell override from the system copy before each plasmashell start, so Plasma updates are picked up. |
 | `kwin-scripts/floatingwindows` | Insets maximized windows by a small gap so they float like the bar. Apps listed in the script's `exclude` setting (comma-separated window classes, empty by default) stay edge to edge. |
 | `aurorae/Everforest-Dark`, `aurorae/Everforest-Light` | Window decorations in the [Everforest](https://github.com/sainnhe/everforest) palette. They are recoloured from `aurorae/CatppuccinMocha-Classic`, the [Catppuccin](https://github.com/catppuccin/kde) Mocha Classic decoration (MIT), tweaked to drop the titlebar blur mask and the 1px outer border and to widen the button margins. |
 | `lookandfeel/` | Everforest Dark and Light global themes (colours, window decoration, icons). They are set as the defaults for Plasma's own dark-mode switch in Brightness & Color, so that switch and `everforest` do the same thing. |
+| `bin/launcher` | `launcher kickoff\|krunner\|notch` picks what Meta opens: Kickoff in the dock (restyled: favourites grid, compact list), KRunner centred like Spotlight, or the notch launcher from plasma-widgets in the top bar. |
 | `colorschemes/` | Everforest Dark and Light KDE colour schemes. The widgets take their colours from these. |
 | `wallpapers/` | On-palette wallpapers for each mode, also used on the lock screen. |
 | `bin/everforest` | `everforest [dark\|light\|toggle\|status]` switches the colour scheme, window decoration, GTK preference and btop theme. It also sets the matching wallpaper, but only while mural rotation is off. The lock screen is left alone. Bound to Meta+Shift+L and also runnable from KRunner ("Toggle light/dark"). ghostty follows on its own with `theme = light:Everforest Light Med,dark:Everforest Dark Hard`. |

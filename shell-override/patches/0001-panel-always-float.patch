@@ -1,5 +1,5 @@
 --- a/contents/views/Panel.qml	2026-09-08 02:00:00.000000000 +0200
-+++ b/contents/views/Panel.qml	2026-10-15 17:00:08.099945658 +0200
++++ b/contents/views/Panel.qml	2026-10-15 23:29:02.817794828 +0200
 @@ -51,10 +51,12 @@
  
      // NOTE: Many of the properties in this file are accessed directly in C++ PanelView!
@@ -38,7 +38,7 @@
          imagePath: containment?.plasmoid?.backgroundHints === PlasmaCore.Types.NoBackground ? "" : "solid/widgets/panel-background"
      }
 +    Rectangle {
-+        visible: root.topBar && root.floatingness !== 0 && containment?.plasmoid?.backgroundHints !== PlasmaCore.Types.NoBackground
++        visible: root.floatingness !== 0 && containment?.plasmoid?.backgroundHints !== PlasmaCore.Types.NoBackground
 +        anchors.fill: floatingTranslucentItem
 +        radius: Kirigami.Units.cornerRadius
 +        color: Qt.tint(Kirigami.Theme.backgroundColor, Qt.alpha(Kirigami.Theme.textColor, 0.08))

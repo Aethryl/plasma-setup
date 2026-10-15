@@ -23,6 +23,7 @@ done
 kwriteconfig6 --file kdeglobals --group KDE --key DefaultDarkLookAndFeel io.github.aethryl.everforest-dark
 kwriteconfig6 --file kdeglobals --group KDE --key DefaultLightLookAndFeel io.github.aethryl.everforest-light
 ln -sfn "$repo/bin/everforest" "$HOME/.local/bin/everforest"
+ln -sfn "$repo/bin/launcher" "$HOME/.local/bin/launcher"
 ln -sfn "$repo/applications/everforest-toggle.desktop" "$data/applications/everforest-toggle.desktop"
 kwriteconfig6 --file kglobalshortcutsrc --group services --group everforest-toggle.desktop --key _launch "Meta+Shift+L"
 
