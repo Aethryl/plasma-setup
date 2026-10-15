@@ -311,7 +311,7 @@ PlasmoidItem {
         radius: height / 2
         color: Qt.alpha(Kirigami.Theme.textColor, 0.15)
         Rectangle {
-            width: parent.width * Math.min(100, pct) / 100
+            width: pct > 0 ? Math.max(parent.height, parent.width * Math.min(100, pct) / 100) : 0
             height: parent.height
             radius: parent.radius
             color: fill
