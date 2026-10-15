@@ -1,0 +1,19 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "core@catppuccin.com",
+                "Name": "Catppuccin"
+            }
+        ],
+        "Category": "",
+        "Dependencies": [
+        ],
+        "EnabledByDefault": true,
+        "Description": "Everforest Light window decoration, based on Catppuccin Mocha Classic (MIT)",
+        "Id": "Everforest-Light",
+        "License": "MIT",
+        "Name": "Everforest Light",
+        "Version": "0.2.6"
+    }
+}

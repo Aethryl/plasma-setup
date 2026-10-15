@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Toggle light/dark
+Comment=Switch between Everforest Dark and Everforest Light
+Exec=everforest toggle
+Icon=weather-clear-night
+Keywords=theme;light;dark;everforest;
+NoDisplay=false

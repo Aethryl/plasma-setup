@@ -1,6 +1,6 @@
 # plasma-customizations
 
-My KDE Plasma 6 setup: a floating top bar, floating maximized windows, and a Claude status widget.
+My KDE Plasma 6 setup: a floating top bar, floating maximized windows, a Claude status widget, and an Everforest theme with a light/dark switch.
 
 ## What's in here
 
@@ -11,7 +11,12 @@ My KDE Plasma 6 setup: a floating top bar, floating maximized windows, and a Cla
 | `shell-override/` | Patched copy of the Plasma desktop shell: the top bar always floats, has a tiny top gap, and reserves only its drawn height. |
 | `systemd/plasma-shell-override.service` | Rebuilds the shell override from the system copy before each plasmashell start, so Plasma updates are picked up. |
 | `kwin-scripts/floatingwindows` | Insets maximized windows by a small gap so they float like the bar. |
-| `aurorae/CatppuccinMocha-Classic` | [Catppuccin](https://github.com/catppuccin/kde) Mocha Classic window decoration (MIT), tweaked: no titlebar blur mask (it showed as a square behind rounded corners), no 1px outer border line, roomier button margins. |
+| `aurorae/Everforest-Dark`, `aurorae/Everforest-Light` | Window decorations in the [Everforest](https://github.com/sainnhe/everforest) palette. They are recoloured from `aurorae/CatppuccinMocha-Classic`, the [Catppuccin](https://github.com/catppuccin/kde) Mocha Classic decoration (MIT), tweaked to drop the titlebar blur mask and the 1px outer border and to widen the button margins. |
+| `colorschemes/` | Everforest Dark and Light KDE colour schemes. The widgets take their colours from these. |
+| `wallpapers/` | On-palette wallpapers for each mode, also used on the lock screen. |
+| `bin/everforest` | `everforest [dark\|light\|toggle\|status]` switches the colour scheme, window decoration, GTK preference, wallpaper, lock screen and btop theme. Bound to Meta+Shift+L and also runnable from KRunner ("Toggle light/dark"). ghostty follows on its own with `theme = light:Everforest Light Med,dark:Everforest Dark Hard`. |
+| `shell/starship.toml` | Starship prompt in ANSI colours, so it follows the terminal theme in both modes. |
+| `shell/zshrc-snippet.zsh` | fastfetch once per login and the starship init. Paste it into `~/.zshrc` in place of the p10k blocks. Shell config will move to the dotfiles repo later. |
 | `panel/add-claudebar.js` | Adds the widget to the top panel (run via `evaluateScript`). |
 
 ## Requirements

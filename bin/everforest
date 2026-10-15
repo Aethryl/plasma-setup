@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo="$(dirname "$(dirname "$(readlink -f "$0")")")"
+
+current() {
+    [[ "$(kreadconfig6 --file kdeglobals --group General --key ColorScheme)" == EverforestLight ]] && echo light || echo dark
+}
+
+mode="${1:-toggle}"
+case "$mode" in
+    toggle) [[ "$(current)" == dark ]] && mode=light || mode=dark ;;
+    dark|light) ;;
+    status) current; exit 0 ;;
+    *) echo "usage: everforest [dark|light|toggle|status]" >&2; exit 2 ;;
+esac
+Mode="${mode^}"
+
+plasma-apply-colorscheme "Everforest$Mode" >/dev/null
+
+kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key library org.kde.kwin.aurorae.v2
+kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme "__aurorae__svg__Everforest-$Mode"
+gdbus call --session -d org.kde.KWin -o /KWin -m org.kde.KWin.reconfigure >/dev/null
+
+if [[ "$mode" == dark ]]; then
+    gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+else
+    gsettings set org.gnome.desktop.interface color-scheme prefer-light 2>/dev/null \
+        || gsettings set org.gnome.desktop.interface color-scheme default
+fi
+
+wallpaper="$(find "$repo/wallpapers" -name "everforest-$mode.*" -print -quit)"
+if [[ -n "$wallpaper" ]]; then
+    plasma-apply-wallpaperimage "$wallpaper" >/dev/null
+    kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General \
+        --key Image "file://$wallpaper"
+fi
+
+btop="${XDG_CONFIG_HOME:-$HOME/.config}/btop/btop.conf"
+if [[ -f "$btop" ]]; then
+    sed -i "s|^color_theme = .*|color_theme = \"everforest-$mode-medium\"|" "$btop"
+fi

@@ -19,7 +19,6 @@ PlasmoidItem {
     property bool drooped: false
     property bool showIdle: false
 
-    readonly property color notchColor: "#262634"
     readonly property real ear: Kirigami.Units.gridUnit * 0.7
     readonly property real bottomRadius: Kirigami.Units.gridUnit * 1.1
 
@@ -27,11 +26,11 @@ PlasmoidItem {
     readonly property var activeAgents: agents ? agents.list.filter(a => a.status !== "idle") : []
     readonly property var idleAgents: agents ? agents.list.filter(a => a.status === "idle") : []
 
-    readonly property color green: "#a6e3a1"
-    readonly property color yellow: "#f9e2af"
-    readonly property color red: "#f38ba8"
-    readonly property color peach: "#fab387"
-    readonly property color dim: Qt.alpha(Kirigami.Theme.textColor, 0.45)
+    readonly property color ok: Kirigami.Theme.positiveTextColor
+    readonly property color warning: Kirigami.Theme.neutralTextColor
+    readonly property color critical: Kirigami.Theme.negativeTextColor
+    readonly property color blocked: Kirigami.Theme.neutralTextColor
+    readonly property color dim: Kirigami.Theme.disabledTextColor
     readonly property color hairline: Qt.alpha(Kirigami.Theme.textColor, 0.1)
 
     preferredRepresentation: compactRepresentation
@@ -39,11 +38,11 @@ PlasmoidItem {
     Plasmoid.backgroundHints: "NoBackground"
 
     function pctColor(pct) {
-        return pct >= 85 ? red : pct >= 60 ? yellow : green
+        return pct >= 85 ? critical : pct >= 60 ? warning : ok
     }
 
     function statusColor(status) {
-        return status === "working" ? green : status === "blocked" ? peach : dim
+        return status === "working" ? ok : status === "blocked" ? blocked : dim
     }
 
     function timeLeft(resetsAt) {
@@ -125,8 +124,48 @@ PlasmoidItem {
         id: count
         property color dotColor
         property var value
+        property bool pulse: false
         spacing: Kirigami.Units.smallSpacing / 2
-        Dot { dotColor: count.dotColor }
+        Item {
+            id: dotSlot
+            readonly property bool beating: count.pulse && count.visible
+            readonly property bool animated: Kirigami.Units.longDuration > 0
+            implicitWidth: dot.implicitWidth
+            implicitHeight: dot.implicitHeight
+            Layout.alignment: Qt.AlignVCenter
+
+            function settle() {
+                dot.scale = 1
+                halo.scale = 1
+                halo.opacity = beating && !animated ? 0.35 : 0
+            }
+            onBeatingChanged: settle()
+            onAnimatedChanged: settle()
+
+            Rectangle {
+                id: halo
+                anchors.fill: parent
+                radius: width / 2
+                color: count.dotColor
+                opacity: 0
+            }
+            Dot {
+                id: dot
+                anchors.fill: parent
+                dotColor: count.dotColor
+            }
+            ParallelAnimation {
+                running: dotSlot.beating && dotSlot.animated
+                loops: Animation.Infinite
+                onRunningChanged: if (!running) dotSlot.settle()
+                SequentialAnimation {
+                    NumberAnimation { target: dot; property: "scale"; from: 1; to: 1.3; duration: 700; easing.type: Easing.InOutQuad }
+                    NumberAnimation { target: dot; property: "scale"; from: 1.3; to: 1; duration: 700; easing.type: Easing.InOutQuad }
+                }
+                NumberAnimation { target: halo; property: "scale"; from: 1; to: 2.6; duration: 1400; easing.type: Easing.OutQuad }
+                NumberAnimation { target: halo; property: "opacity"; from: 0.35; to: 0; duration: 1400; easing.type: Easing.OutQuad }
+            }
+        }
         PlasmaComponents.Label {
             text: value === undefined || value === null ? "–" : value
             color: value ? Kirigami.Theme.textColor : root.dim
@@ -275,8 +314,8 @@ PlasmoidItem {
 
             RowLayout {
                 spacing: Kirigami.Units.smallSpacing * 2
-                Count { dotColor: root.green; value: root.agents ? root.agents.working : null }
-                Count { dotColor: root.peach; value: root.agents ? root.agents.blocked : null }
+                Count { dotColor: root.ok; value: root.agents ? root.agents.working : null }
+                Count { dotColor: root.blocked; pulse: !!root.agents && root.agents.blocked > 0; value: root.agents ? root.agents.blocked : null }
                 Count { dotColor: root.dim; value: root.agents ? root.agents.idle : null }
             }
             Rectangle { Layout.preferredWidth: 1; Layout.preferredHeight: row.height * 0.7; color: root.dim }
@@ -323,6 +362,8 @@ PlasmoidItem {
             property real progress: 0
             focus: true
             Keys.onEscapePressed: root.drooped = false
+            Kirigami.Theme.colorSet: Kirigami.Theme.Window
+            Kirigami.Theme.inherit: false
             readonly property real bodyWidth: Math.max(root.compactWidth, Kirigami.Units.gridUnit * 16) + Kirigami.Units.gridUnit
             readonly property real fullHeight: content.implicitHeight + Kirigami.Units.gridUnit * 1.6
             readonly property real shownHeight: Math.max(0, fullHeight * progress)
@@ -339,7 +380,7 @@ PlasmoidItem {
                     readonly property real h: Math.max(notch.shownHeight, e + 1)
                     readonly property real r: Math.min(root.bottomRadius, h - e)
                     strokeWidth: -1
-                    fillColor: root.notchColor
+                    fillColor: Kirigami.Theme.backgroundColor
                     startX: 0; startY: 0
                     PathQuad { controlX: sp.e; controlY: 0; x: sp.e; y: sp.e }
                     PathLine { x: sp.e; y: sp.h - sp.r }

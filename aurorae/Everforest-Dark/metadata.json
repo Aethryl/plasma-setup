@@ -1,0 +1,19 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "core@catppuccin.com",
+                "Name": "Catppuccin"
+            }
+        ],
+        "Category": "",
+        "Dependencies": [
+        ],
+        "EnabledByDefault": true,
+        "Description": "Everforest Dark window decoration, based on Catppuccin Mocha Classic (MIT)",
+        "Id": "Everforest-Dark",
+        "License": "MIT",
+        "Name": "Everforest Dark",
+        "Version": "0.2.6"
+    }
+}
