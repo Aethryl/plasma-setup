@@ -24,6 +24,8 @@ kwriteconfig6 --file kdeglobals --group KDE --key DefaultDarkLookAndFeel io.gith
 kwriteconfig6 --file kdeglobals --group KDE --key DefaultLightLookAndFeel io.github.aethryl.everforest-light
 ln -sfn "$repo/bin/everforest" "$HOME/.local/bin/everforest"
 ln -sfn "$repo/bin/launcher" "$HOME/.local/bin/launcher"
+mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/autostart"
+printf '[Desktop Entry]\nHidden=true\n' > "${XDG_CONFIG_HOME:-$HOME/.config}/autostart/org.kde.discover.notifier.desktop"
 ln -sfn "$repo/applications/everforest-toggle.desktop" "$data/applications/everforest-toggle.desktop"
 kwriteconfig6 --file kglobalshortcutsrc --group services --group everforest-toggle.desktop --key _launch "Meta+Shift+L"
 
