@@ -1,0 +1,15 @@
+[kdeglobals][General]
+ColorScheme=EverforestDark
+
+[kdeglobals][Icons]
+Theme=Papirus-Dark
+
+[kdeglobals][KDE]
+widgetStyle=Breeze
+
+[plasmarc][Theme]
+name=default
+
+[kwinrc][org.kde.kdecoration2]
+library=org.kde.kwin.aurorae.v2
+theme=__aurorae__svg__Everforest-Dark

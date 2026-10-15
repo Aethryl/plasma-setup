@@ -2,11 +2,11 @@
     "KPlugin": {
         "Authors": [{ "Name": "Fabian" }],
         "Category": "Utilities",
-        "Description": "Wallpaper rotation through wallrot collections",
+        "Description": "Wallpaper rotation through mural collections",
         "Icon": "preferences-desktop-wallpaper",
-        "Id": "io.github.aethryl.wallbar",
+        "Id": "io.github.aethryl.mural",
         "License": "MIT",
-        "Name": "Wall Bar",
+        "Name": "Mural",
         "Version": "0.1"
     },
     "KPackageStructure": "Plasma/Applet",

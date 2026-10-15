@@ -14,13 +14,7 @@ case "$mode" in
     status) current; exit 0 ;;
     *) echo "usage: everforest [dark|light|toggle|status]" >&2; exit 2 ;;
 esac
-Mode="${mode^}"
-
-plasma-apply-colorscheme "Everforest$Mode" >/dev/null
-
-kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key library org.kde.kwin.aurorae.v2
-kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme "__aurorae__svg__Everforest-$Mode"
-gdbus call --session -d org.kde.KWin -o /KWin -m org.kde.KWin.reconfigure >/dev/null
+plasma-apply-lookandfeel -a "io.github.aethryl.everforest-$mode" >/dev/null
 
 if [[ "$mode" == dark ]]; then
     gsettings set org.gnome.desktop.interface color-scheme prefer-dark
@@ -30,7 +24,7 @@ else
 fi
 
 rotating="$(python3 -c 'import json,os,sys; print(json.load(open(sys.argv[1])).get("enabled", True))' \
-    "${XDG_STATE_HOME:-$HOME/.local/state}/wallrot/state.json" 2>/dev/null || echo False)"
+    "${XDG_STATE_HOME:-$HOME/.local/state}/mural/state.json" 2>/dev/null || echo False)"
 wallpaper="$(find "$repo/wallpapers" -name "everforest-$mode.*" -print -quit)"
 if [[ "$rotating" != True && -n "$wallpaper" ]]; then
     plasma-apply-wallpaperimage "$wallpaper" >/dev/null

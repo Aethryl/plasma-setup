@@ -18,17 +18,17 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 MANIFEST = REPO / "wallpapers" / "collection.json"
 LIBRARY = Path(
-    os.environ.get("WALLROT_LIBRARY", Path.home() / "Pictures" / "Wallpapers")
+    os.environ.get("MURAL_LIBRARY", Path.home() / "Pictures" / "Wallpapers")
 )
 STATE = (
     Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state"))
-    / "wallrot"
+    / "mural"
     / "state.json"
 )
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
 MAX_SIDE = 5160
 KEEP_PIXELS = {"pixel-art"}
-USER_AGENT = "wallrot/1.0 (https://github.com/Aethryl/plasma-customizations)"
+USER_AGENT = "mural/1.0 (https://github.com/Aethryl/plasma-customizations)"
 WIKIMEDIA = "https://upload.wikimedia.org/wikipedia/commons/"
 WIKIMEDIA_WIDTHS = (3840, 2560)
 MIN_SIZE = (2560, 1440)
@@ -328,7 +328,7 @@ def fetch(state: dict) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="wallrot")
+    parser = argparse.ArgumentParser(prog="mural")
     sub = parser.add_subparsers(dest="command", required=True)
     for name in ("status", "list", "next", "fetch", "on", "off"):
         sub.add_parser(name)

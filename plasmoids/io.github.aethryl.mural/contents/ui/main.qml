@@ -10,7 +10,7 @@ import org.kde.plasma.plasma5support as P5Support
 PlasmoidItem {
     id: root
 
-    readonly property string wallrot: "w=\"$HOME/.local/bin/wallrot\"; [ -x \"$w\" ] || w=wallrot; \"$w\""
+    readonly property string mural: "w=\"$HOME/.local/bin/mural\"; [ -x \"$w\" ] || w=mural; \"$w\""
     readonly property bool inPanel: Plasmoid.formFactor === PlasmaCore.Types.Horizontal || Plasmoid.formFactor === PlasmaCore.Types.Vertical
     readonly property bool windowed: Plasmoid.formFactor === PlasmaCore.Types.Planar || Plasmoid.location === PlasmaCore.Types.Floating
     property var wall: null
@@ -62,7 +62,7 @@ PlasmoidItem {
     }
 
     function command(args) {
-        return root.wallrot + " " + args
+        return root.mural + " " + args
     }
 
     function exec(args, done) {
@@ -109,7 +109,7 @@ PlasmoidItem {
 
     function openManager() {
         root.drooped = false
-        executable.connectSource("setsid -f plasmawindowed io.github.aethryl.wallbar >/dev/null 2>&1")
+        executable.connectSource("setsid -f plasmawindowed io.github.aethryl.mural >/dev/null 2>&1")
     }
 
     function applyStatus(parsed) {
@@ -164,7 +164,7 @@ PlasmoidItem {
                 done({
                     ok: data["exit code"] === 0,
                     status: parsed,
-                    error: errors.length ? errors[errors.length - 1] : (data["exit code"] === 0 ? "" : "wallrot failed")
+                    error: errors.length ? errors[errors.length - 1] : (data["exit code"] === 0 ? "" : "mural failed")
                 })
             }
         }
@@ -409,7 +409,7 @@ PlasmoidItem {
                         visible: !root.wall
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignHCenter
-                        text: root.failed ? "wallrot not found" : "Loading…"
+                        text: root.failed ? "mural not found" : "Loading…"
                         color: root.dim
                     }
 

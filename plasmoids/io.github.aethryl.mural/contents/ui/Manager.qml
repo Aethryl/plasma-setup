@@ -207,7 +207,7 @@ Rectangle {
                             Layout.fillWidth: true
                             Layout.minimumWidth: 0
                             level: 3
-                            text: manager.app.current ? manager.app.current.title : manager.app.failed ? "wallrot not found" : "No wallpaper set"
+                            text: manager.app.current ? manager.app.current.title : manager.app.failed ? "mural not found" : "No wallpaper set"
                             elide: Text.ElideRight
                         }
                         QQC2.Label {
