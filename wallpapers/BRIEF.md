@@ -11,4 +11,5 @@ Interview answers, kept for when the collection is built.
 - **Format:** ultrawide 3440×1440 first; the 16:10 laptop may crop or use a different image
 - **Sources:** free and curated packs (GitHub collections, Unsplash-like sites, KDE Store), Wallhaven, anything else worth pulling from
 
-Process: internet crawl, then an options presentation as an artifact to choose from.
+Now: pick one static wallpaper (dark) and one (light) from a curated options artifact.
+Later: a collection with a theme/wallpaper switcher or auto-rotator.

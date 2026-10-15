@@ -1,0 +1,304 @@
+#!/usr/bin/env python3
+"""Wallpaper rotation over ~/Pictures/Wallpapers/<collection>/ for Plasma."""
+
+import argparse
+import json
+import os
+import random
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parent.parent
+MANIFEST = REPO / "wallpapers" / "collection.json"
+LIBRARY = Path(
+    os.environ.get("WALLROT_LIBRARY", Path.home() / "Pictures" / "Wallpapers")
+)
+STATE = (
+    Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state"))
+    / "wallrot"
+    / "state.json"
+)
+IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
+MAX_SIDE = 5160
+KEEP_PIXELS = {"pixel-art"}
+USER_AGENT = "wallrot/1.0 (https://github.com/Aethryl/plasma-customizations)"
+WIKIMEDIA = "https://upload.wikimedia.org/wikipedia/commons/"
+WIKIMEDIA_WIDTHS = (3840, 2560)
+MIN_SIZE = (2560, 1440)
+
+DEFAULTS = {
+    "enabled": True,
+    "collection": "all",
+    "interval": 30,
+    "current": None,
+    "queue": [],
+    "excluded": [],
+    "deleted": [],
+}
+
+
+def load_state() -> dict:
+    try:
+        return DEFAULTS | json.loads(STATE.read_text())
+    except (OSError, ValueError):
+        return dict(DEFAULTS)
+
+
+def save_state(state: dict) -> None:
+    STATE.parent.mkdir(parents=True, exist_ok=True)
+    tmp = STATE.with_suffix(".tmp")
+    tmp.write_text(json.dumps(state, indent=1))
+    tmp.replace(STATE)
+
+
+def manifest() -> dict[str, dict]:
+    try:
+        return {item["id"]: item for item in json.loads(MANIFEST.read_text())}
+    except (OSError, ValueError):
+        return {}
+
+
+def library() -> dict[str, Path]:
+    images = {}
+    if LIBRARY.is_dir():
+        for path in sorted(LIBRARY.glob("*/*")):
+            if path.suffix.lower() in IMAGE_SUFFIXES:
+                images[path.stem] = path
+    return images
+
+
+def eligible(state: dict, images: dict[str, Path]) -> list[str]:
+    skip = set(state["excluded"])
+    return [
+        key
+        for key, path in images.items()
+        if key not in skip
+        and (state["collection"] == "all" or path.parent.name == state["collection"])
+    ]
+
+
+def apply(path: Path) -> None:
+    subprocess.run(
+        ["plasma-apply-wallpaperimage", str(path)], check=True, capture_output=True
+    )
+
+
+def advance(state: dict) -> str | None:
+    images = library()
+    pool = eligible(state, images)
+    if not pool:
+        state["current"] = None
+        return None
+    queue = [key for key in state["queue"] if key in pool and key != state["current"]]
+    if not queue:
+        queue = [key for key in pool if key != state["current"]] or pool
+        random.shuffle(queue)
+    key = queue.pop(0)
+    state["queue"] = queue
+    state["current"] = key
+    apply(images[key])
+    return key
+
+
+def status(state: dict) -> dict:
+    images = library()
+    meta = manifest()
+    counts: dict[str, int] = {}
+    for key, path in images.items():
+        if key not in state["excluded"]:
+            counts[path.parent.name] = counts.get(path.parent.name, 0) + 1
+    current = None
+    if state["current"] in images:
+        path = images[state["current"]]
+        item = meta.get(state["current"], {})
+        current = {
+            "id": state["current"],
+            "title": item.get("title") or state["current"],
+            "collection": path.parent.name,
+            "source": item.get("source"),
+            "page": item.get("page"),
+            "path": str(path),
+        }
+    return {
+        "enabled": state["enabled"],
+        "collection": state["collection"],
+        "interval": state["interval"],
+        "current": current,
+        "collections": [
+            {"name": name, "count": count} for name, count in sorted(counts.items())
+        ],
+        "total": sum(counts.values()),
+        "excluded": len(state["excluded"]),
+    }
+
+
+def trash(path: Path) -> None:
+    if shutil.which("gio"):
+        subprocess.run(["gio", "trash", str(path)], check=True)
+    else:
+        subprocess.run(["kioclient", "move", str(path), "trash:/"], check=True)
+
+
+def download(item: dict) -> bytes:
+    if item.get("dotfiles"):
+        return subprocess.run(
+            [
+                "gh",
+                "api",
+                "-H",
+                "Accept: application/vnd.github.raw",
+                f"repos/Aethryl/dotfiles/contents/{item['dotfiles']}",
+            ],
+            check=True,
+            capture_output=True,
+        ).stdout
+    url = item["url"]
+    urls = [url]
+    if url.startswith(WIKIMEDIA) and "/thumb/" not in url:
+        path = url.removeprefix(WIKIMEDIA)
+        name = path.rsplit("/", 1)[-1]
+        if name.lower().endswith((".tif", ".tiff")):
+            name += ".jpg"
+        urls = [
+            f"{WIKIMEDIA}thumb/{path}/{width}px-{name}" for width in WIKIMEDIA_WIDTHS
+        ]
+        urls.append(url)
+    for candidate in urls:
+        if candidate.startswith(WIKIMEDIA):
+            time.sleep(2)
+        request = urllib.request.Request(candidate, headers={"User-Agent": USER_AGENT})
+        for attempt in range(4):
+            try:
+                with urllib.request.urlopen(request, timeout=120) as response:
+                    return response.read()
+            except urllib.error.HTTPError as error:
+                if error.code in (400, 404) and candidate != urls[-1]:
+                    break
+                if error.code != 429 or attempt == 3:
+                    raise
+                time.sleep(30 * (attempt + 1))
+    raise OSError(f"no usable url for {item['id']}")
+
+
+def store(item: dict, data: bytes) -> Path:
+    source = item.get("dotfiles") or item["url"]
+    suffix = Path(source.split("?")[0]).suffix.lower()
+    suffix = suffix if suffix in IMAGE_SUFFIXES else ".jpg"
+    folder = LIBRARY / item["collection"]
+    folder.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(suffix=suffix, dir=folder, delete=False) as tmp:
+        tmp.write(data)
+    raw = Path(tmp.name)
+    target = folder / f"{item['id']}{suffix}"
+    size = subprocess.run(
+        ["magick", "identify", "-format", "%w %h", f"{raw}[0]"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    width, height = (
+        (int(v) for v in size.stdout.split()) if size.returncode == 0 else (0, 0)
+    )
+    if not width:
+        raw.unlink()
+        raise ValueError("not an image")
+    if width < MIN_SIZE[0] or height < MIN_SIZE[1]:
+        raw.unlink()
+        raise ValueError(f"{width}x{height} is below {MIN_SIZE[0]}x{MIN_SIZE[1]}")
+    if item["collection"] in KEEP_PIXELS or max(width, height) <= MAX_SIDE:
+        raw.replace(target)
+        return target
+    target = folder / f"{item['id']}.jpg"
+    subprocess.run(
+        [
+            "magick",
+            f"{raw}[0]",
+            "-resize",
+            f"{MAX_SIDE}x{MAX_SIDE}>",
+            "-quality",
+            "92",
+            str(target),
+        ],
+        check=True,
+    )
+    raw.unlink()
+    return target
+
+
+def fetch(state: dict) -> None:
+    have = library()
+    items = [
+        item
+        for item in manifest().values()
+        if item["id"] not in have and item["id"] not in state["deleted"]
+    ]
+    failed = []
+    for n, item in enumerate(items, 1):
+        try:
+            path = store(item, download(item))
+            print(f"[{n}/{len(items)}] {path.relative_to(LIBRARY)}")
+        except (OSError, ValueError, subprocess.CalledProcessError) as error:
+            failed.append(item["id"])
+            print(f"[{n}/{len(items)}] failed {item['id']}: {error}", file=sys.stderr)
+    print(f"done: {len(items) - len(failed)} fetched, {len(failed)} failed")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(prog="wallrot")
+    sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("status")
+    sub.add_parser("next")
+    sub.add_parser("fetch")
+    sub.add_parser("on")
+    sub.add_parser("off")
+    sub.add_parser("collection").add_argument("name")
+    sub.add_parser("interval").add_argument("minutes", type=int)
+    for name in ("exclude", "delete"):
+        sub.add_parser(name).add_argument("id", nargs="?")
+    sub.add_parser("include").add_argument("id")
+    args = parser.parse_args()
+
+    state = load_state()
+    command = args.command
+    if command == "fetch":
+        fetch(state)
+    elif command == "next":
+        advance(state)
+    elif command in ("on", "off"):
+        state["enabled"] = command == "on"
+        if state["enabled"]:
+            advance(state)
+    elif command == "collection":
+        state["collection"] = args.name
+        state["queue"] = []
+        advance(state)
+    elif command == "interval":
+        state["interval"] = max(1, args.minutes)
+    elif command == "include":
+        state["excluded"] = [key for key in state["excluded"] if key != args.id]
+    elif command in ("exclude", "delete"):
+        key = args.id or state["current"]
+        if key:
+            if command == "exclude":
+                state["excluded"] = sorted(set(state["excluded"]) | {key})
+            else:
+                path = library().get(key)
+                if path:
+                    trash(path)
+                state["deleted"] = sorted(set(state["deleted"]) | {key})
+                state["excluded"] = [k for k in state["excluded"] if k != key]
+            if key == state["current"]:
+                advance(state)
+    save_state(state)
+    if command != "fetch":
+        print(json.dumps(status(state)))
+
+
+if __name__ == "__main__":
+    main()

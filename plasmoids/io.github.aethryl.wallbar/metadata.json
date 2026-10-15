@@ -1,0 +1,14 @@
+{
+    "KPlugin": {
+        "Authors": [{ "Name": "Fabian" }],
+        "Category": "Utilities",
+        "Description": "Wallpaper rotation through wallrot collections",
+        "Icon": "preferences-desktop-wallpaper",
+        "Id": "io.github.aethryl.wallbar",
+        "License": "MIT",
+        "Name": "Wall Bar",
+        "Version": "0.1"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

@@ -8,6 +8,7 @@ mkdir -p "$data/plasma/plasmoids" "$data/kwin/scripts" "$data/aurorae/themes" "$
     "$data/applications" "$HOME/.local/bin"
 ln -sfn "$repo/plasmoids/io.github.aethryl.claudebar" "$data/plasma/plasmoids/io.github.aethryl.claudebar"
 ln -sfn "$repo/plasmoids/io.github.aethryl.sysbar" "$data/plasma/plasmoids/io.github.aethryl.sysbar"
+ln -sfn "$repo/plasmoids/io.github.aethryl.wallbar" "$data/plasma/plasmoids/io.github.aethryl.wallbar"
 ln -sfn "$repo/kwin-scripts/floatingwindows" "$data/kwin/scripts/floatingwindows"
 
 for variant in Dark Light; do
@@ -19,6 +20,7 @@ for variant in Dark Light; do
     ln -sfn "$repo/colorschemes/Everforest$variant.colors" "$data/color-schemes/Everforest$variant.colors"
 done
 ln -sfn "$repo/bin/everforest" "$HOME/.local/bin/everforest"
+ln -sfn "$repo/bin/wallrot" "$HOME/.local/bin/wallrot"
 ln -sfn "$repo/applications/everforest-toggle.desktop" "$data/applications/everforest-toggle.desktop"
 kwriteconfig6 --file kglobalshortcutsrc --group services --group everforest-toggle.desktop --key _launch "Meta+Shift+L"
 

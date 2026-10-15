@@ -29,11 +29,11 @@ else
         || gsettings set org.gnome.desktop.interface color-scheme default
 fi
 
+rotating="$(python3 -c 'import json,os,sys; print(json.load(open(sys.argv[1])).get("enabled", True))' \
+    "${XDG_STATE_HOME:-$HOME/.local/state}/wallrot/state.json" 2>/dev/null || echo False)"
 wallpaper="$(find "$repo/wallpapers" -name "everforest-$mode.*" -print -quit)"
-if [[ -n "$wallpaper" ]]; then
+if [[ "$rotating" != True && -n "$wallpaper" ]]; then
     plasma-apply-wallpaperimage "$wallpaper" >/dev/null
-    kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General \
-        --key Image "file://$wallpaper"
 fi
 
 btop="${XDG_CONFIG_HOME:-$HOME/.config}/btop/btop.conf"
