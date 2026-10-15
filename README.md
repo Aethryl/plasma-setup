@@ -17,19 +17,11 @@ My KDE Plasma 6 setup: a floating top bar, floating maximized windows, and a Cla
 - Plasma 6 (tested on 6.7.5, Fedora 44)
 - herdr on `~/.local/bin/herdr` for agent counts
 - `kwin-effect-roundcorners` for the rounded corners and outlines
-- Claude Code with a statusline script that writes `rate_limits` to `~/.cache/claude-bar/limits.json`:
-
-  ```python
-  def cache_rate_limits(rate_limits):
-      if not rate_limits:
-          return
-      path = os.path.expanduser("~/.cache/claude-bar/limits.json")
-      os.makedirs(os.path.dirname(path), exist_ok=True)
-      tmp = f"{path}.{os.getpid()}.tmp"
-      with open(tmp, "w") as f:
-          json.dump({"updated_at": time.time(), "rate_limits": rate_limits}, f)
-      os.replace(tmp, path)
-  ```
+- Claude Code with a statusline script that merges `rate_limits` into `~/.cache/claude-bar/limits.json`.
+  Every open session runs the statusline with its own last-known snapshot, so the writer must merge per
+  window instead of overwriting: keep the higher `used_percentage` for the same `resets_at`, take a later
+  `resets_at` as a new window, and never drop a window a snapshot omits. Take a file lock around the
+  read-merge-write. Reference implementation: `cache_rate_limits` in `~/.claude/statusline.py`.
 
 ## Install
 
