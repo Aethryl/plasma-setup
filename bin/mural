@@ -17,9 +17,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 MANIFEST = REPO / "wallpapers" / "collection.json"
-LIBRARY = Path(
-    os.environ.get("MURAL_LIBRARY", Path.home() / "Pictures" / "Wallpapers")
-)
+LIBRARY = Path(os.environ.get("MURAL_LIBRARY", Path.home() / "Pictures" / "Wallpapers"))
 STATE = (
     Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state"))
     / "mural"
@@ -289,8 +287,12 @@ def store(item: dict, data: bytes) -> Path:
     if width < MIN_SIZE[0] or height < MIN_SIZE[1]:
         raw.unlink()
         raise ValueError(f"{width}x{height} is below {MIN_SIZE[0]}x{MIN_SIZE[1]}")
-    if item["collection"] in KEEP_PIXELS or max(width, height) <= MAX_SIDE:
+    if max(width, height) <= MAX_SIDE:
         raw.replace(target)
+        return target
+    if item["collection"] in KEEP_PIXELS:
+        shrink_pixels(raw, target, max(width, height))
+        raw.unlink()
         return target
     target = folder / f"{item['id']}.jpg"
     subprocess.run(
@@ -307,6 +309,22 @@ def store(item: dict, data: bytes) -> Path:
     )
     raw.unlink()
     return target
+
+
+def shrink_pixels(source: Path, target: Path, longest: int) -> None:
+    factor = -(-longest // MAX_SIDE)
+    subprocess.run(
+        [
+            "magick",
+            f"{source}[0]",
+            "-filter",
+            "point",
+            "-resize",
+            f"{100 / factor:.6f}%",
+            str(target),
+        ],
+        check=True,
+    )
 
 
 def fetch(state: dict) -> None:
