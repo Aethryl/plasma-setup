@@ -11,6 +11,7 @@ My KDE Plasma 6 setup: a floating top bar, floating maximized windows, and a Cla
 | `shell-override/` | Patched copy of the Plasma desktop shell: the top bar always floats, has a tiny top gap, and reserves only its drawn height. |
 | `systemd/plasma-shell-override.service` | Rebuilds the shell override from the system copy before each plasmashell start, so Plasma updates are picked up. |
 | `kwin-scripts/floatingwindows` | Insets maximized windows by a small gap so they float like the bar. |
+| `aurorae/CatppuccinMocha-Classic` | [Catppuccin](https://github.com/catppuccin/kde) Mocha Classic window decoration (MIT), tweaked: no titlebar blur mask (it showed as a square behind rounded corners), no 1px outer border line, roomier button margins. |
 | `panel/add-claudebar.js` | Adds the widget to the top panel (run via `evaluateScript`). |
 
 ## Requirements
