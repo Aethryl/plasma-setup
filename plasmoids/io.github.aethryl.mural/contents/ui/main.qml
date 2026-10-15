@@ -29,6 +29,7 @@ PlasmoidItem {
     readonly property real bottomRadius: Kirigami.Units.gridUnit * 1.1
 
     readonly property var current: wall ? wall.current : null
+    readonly property var upNext: wall ? wall.next : null
     readonly property bool rotating: !!wall && wall.enabled
     readonly property var intervals: [
         { minutes: 10, label: "10m" },
@@ -294,8 +295,8 @@ PlasmoidItem {
                 Kirigami.ShadowedImage {
                     id: thumb
                     anchors.fill: parent
-                    visible: !!root.current && status === Image.Ready
-                    source: root.current ? root.imageUrl(root.current.path) : ""
+                    visible: !!root.upNext && status === Image.Ready
+                    source: root.upNext ? root.imageUrl(root.upNext.path) : ""
                     sourceSize.width: Kirigami.Units.iconSizes.small * 4
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
@@ -310,10 +311,6 @@ PlasmoidItem {
                     source: "preferences-desktop-wallpaper"
                     color: root.failed ? root.dim : Kirigami.Theme.textColor
                 }
-            }
-            PlasmaComponents.Label {
-                text: root.wall ? root.wall.collection : root.failed ? "–" : ""
-                color: root.dim
             }
         }
     }

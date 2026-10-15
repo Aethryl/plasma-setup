@@ -131,6 +131,9 @@ def advance(state: dict) -> str | None:
         queue = [key for key in pool if key != state["current"]] or pool
         random.shuffle(queue)
     key = queue.pop(0)
+    if not queue:
+        queue = [k for k in pool if k != key]
+        random.shuffle(queue)
     state["queue"] = queue
     state["current"] = key
     apply(images[key])
@@ -156,8 +159,22 @@ def status(state: dict) -> dict:
             "page": item.get("page"),
             "path": str(path),
         }
+    upcoming = next(
+        (k for k in state["queue"] if k in images and k not in state["excluded"]),
+        None,
+    )
+    following = None
+    if upcoming:
+        path = images[upcoming]
+        following = {
+            "id": upcoming,
+            "title": meta.get(upcoming, {}).get("title") or upcoming,
+            "collection": path.parent.name,
+            "path": str(path),
+        }
     return {
         "enabled": state["enabled"],
+        "next": following,
         "collection": state["collection"],
         "interval": state["interval"],
         "current": current,
