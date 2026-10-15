@@ -330,7 +330,7 @@ PlasmoidItem {
             color: root.dim
         }
         Bar {
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 3
+            Layout.preferredWidth: Kirigami.Units.gridUnit * 1.8
             pct: parent.pct
             fill: root.pctColor(parent.pct)
         }

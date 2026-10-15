@@ -90,15 +90,6 @@
   "license": "own collection"
  },
  {
-  "id": "pd-mooncolony",
-  "collection": "illustration",
-  "title": "Moon Colony",
-  "source": "NASA/SAIC space art",
-  "page": "https://commons.wikimedia.org/wiki/File:Mooncolony.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Mooncolony.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
   "id": "wh-p9gr2p",
   "collection": "illustration",
   "title": "Lone tree beside glowing teal moon",
@@ -144,48 +135,12 @@
   "license": "own collection"
  },
  {
-  "id": "df-pixel-art-1050408",
-  "collection": "pixel-art",
-  "title": "1050408",
-  "source": "Aethryl/dotfiles",
-  "page": "https://github.com/Aethryl/dotfiles",
-  "dotfiles": "archive/ubuntu-stow/dot-background-profiles/pixel-art/1050408.jpg",
-  "license": "own collection"
- },
- {
   "id": "df-pixel-art-1061221",
   "collection": "pixel-art",
   "title": "1061221",
   "source": "Aethryl/dotfiles",
   "page": "https://github.com/Aethryl/dotfiles",
   "dotfiles": "archive/ubuntu-stow/dot-background-profiles/pixel-art/1061221.png",
-  "license": "own collection"
- },
- {
-  "id": "df-pixel-art-1168050",
-  "collection": "pixel-art",
-  "title": "1168050",
-  "source": "Aethryl/dotfiles",
-  "page": "https://github.com/Aethryl/dotfiles",
-  "dotfiles": "archive/ubuntu-stow/dot-background-profiles/pixel-art/1168050.png",
-  "license": "own collection"
- },
- {
-  "id": "df-pixel-art-900628",
-  "collection": "pixel-art",
-  "title": "900628",
-  "source": "Aethryl/dotfiles",
-  "page": "https://github.com/Aethryl/dotfiles",
-  "dotfiles": "archive/ubuntu-stow/dot-background-profiles/pixel-art/900628.png",
-  "license": "own collection"
- },
- {
-  "id": "df-pixel-art-982770",
-  "collection": "pixel-art",
-  "title": "982770",
-  "source": "Aethryl/dotfiles",
-  "page": "https://github.com/Aethryl/dotfiles",
-  "dotfiles": "archive/ubuntu-stow/dot-background-profiles/pixel-art/982770.png",
   "license": "own collection"
  },
  {
@@ -243,15 +198,6 @@
   "license": "unclear (Wallhaven upload)"
  },
  {
-  "id": "wh-9m8q31",
-  "collection": "pixel-art",
-  "title": "Snowy pixel cliff over purple valley",
-  "source": "Wallhaven",
-  "page": "https://wallhaven.cc/w/9m8q31",
-  "url": "https://w.wallhaven.cc/full/9m/wallhaven-9m8q31.jpg",
-  "license": "unclear (Wallhaven upload)"
- },
- {
   "id": "wh-ly3gmr",
   "collection": "pixel-art",
   "title": "Pixel city skyline at red dusk",
@@ -270,51 +216,6 @@
   "license": "unclear (Wallhaven upload)"
  },
  {
-  "id": "gh-wh-neon-canyon",
-  "collection": "retro-futurism",
-  "title": "Neon canyon spires",
-  "source": "neonvoidx/pics",
-  "page": "https://github.com/neonvoidx/pics/blob/master/ultrawide/wallhaven-gw59p3.jpg",
-  "url": "https://raw.githubusercontent.com/neonvoidx/pics/master/ultrawide/wallhaven-gw59p3.jpg",
-  "license": "unclear"
- },
- {
-  "id": "gh-wh-teal-monolith",
-  "collection": "retro-futurism",
-  "title": "Teal-orange monolith road",
-  "source": "neonvoidx/pics",
-  "page": "https://github.com/neonvoidx/pics/blob/master/ultrawide/wallhaven-jevw55.jpg",
-  "url": "https://raw.githubusercontent.com/neonvoidx/pics/master/ultrawide/wallhaven-jevw55.jpg",
-  "license": "unclear"
- },
- {
-  "id": "pd-jpl-visions-of-the-future-enceladus",
-  "collection": "retro-futurism",
-  "title": "Enceladus: Spray Tour",
-  "source": "NASA/JPL Visions of the Future",
-  "page": "https://commons.wikimedia.org/wiki/File:JPL_Visions_of_the_Future,_Enceladus.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/5/59/JPL_Visions_of_the_Future%2C_Enceladus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
-  "id": "pd-jpl-visions-of-the-future-europa",
-  "collection": "retro-futurism",
-  "title": "Europa: Discover Life Under the Ice",
-  "source": "NASA/JPL Visions of the Future",
-  "page": "https://commons.wikimedia.org/wiki/File:JPL_Visions_of_the_Future,_Europa.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/a/af/JPL_Visions_of_the_Future%2C_Europa.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
-  "id": "pd-jpl-visions-of-the-future-grand-tour",
-  "collection": "retro-futurism",
-  "title": "The Grand Tour",
-  "source": "NASA/JPL Visions of the Future",
-  "page": "https://commons.wikimedia.org/wiki/File:JPL_Visions_of_the_Future,_Grand_Tour.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/0/05/JPL_Visions_of_the_Future%2C_Grand_Tour.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
   "id": "pd-jpl-visions-of-the-future-venus",
   "collection": "retro-futurism",
   "title": "Venus: Cloud 9 Observatory",
@@ -330,15 +231,6 @@
   "source": "NASA Ames Space Settlement (1970s)",
   "page": "https://commons.wikimedia.org/wiki/File:Torus_sphere_Interior_view_(ARC-1975-AC75-2621).jpg",
   "url": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Torus_sphere_Interior_view_%28ARC-1975-AC75-2621%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
-  "id": "pd-trappist-1e-const",
-  "collection": "retro-futurism",
-  "title": "TRAPPIST-1e: Planet Hop",
-  "source": "NASA/JPL Exoplanet Travel Bureau",
-  "page": "https://commons.wikimedia.org/wiki/File:TRAPPIST-1e_Const_CMYK_Print.png",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/9/98/TRAPPIST-1e_Const_CMYK_Print.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
   "license": "Public domain (NASA)"
  },
  {
@@ -486,24 +378,6 @@
   "license": "unclear"
  },
  {
-  "id": "pd-kepler-16b",
-  "collection": "space",
-  "title": "Kepler-16b Twin Suns",
-  "source": "NASA/JPL exoplanet art",
-  "page": "https://commons.wikimedia.org/wiki/File:Kepler-16b.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/8/87/Kepler-16b.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
-  "id": "pd-kepler-452b-artist-concept",
-  "collection": "space",
-  "title": "Kepler-452b",
-  "source": "NASA Ames/JPL exoplanet art",
-  "page": "https://commons.wikimedia.org/wiki/File:Kepler-452b_artist_concept.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Kepler-452b_artist_concept.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
   "id": "pd-kepler-62f-with-62e-as-morning-star",
   "collection": "space",
   "title": "Kepler-62f with 62e as Morning Star",
@@ -574,60 +448,6 @@
   "page": "https://github.com/neonvoidx/pics/blob/master/ultrawide/stranded.jpg",
   "url": "https://raw.githubusercontent.com/neonvoidx/pics/master/ultrawide/stranded.jpg",
   "license": "unclear"
- },
- {
-  "id": "gh-wh-cabin-window",
-  "collection": "spaceships",
-  "title": "Starship cabin window",
-  "source": "neonvoidx/pics",
-  "page": "https://github.com/neonvoidx/pics/blob/master/ultrawide/wallhaven-5y7k87.jpg",
-  "url": "https://raw.githubusercontent.com/neonvoidx/pics/master/ultrawide/wallhaven-5y7k87.jpg",
-  "license": "unclear"
- },
- {
-  "id": "gh-wh-crawler",
-  "collection": "spaceships",
-  "title": "Blue-hour crawler platform",
-  "source": "neonvoidx/pics",
-  "page": "https://github.com/neonvoidx/pics/blob/master/ultrawide/wallhaven-7jjwp3.jpg",
-  "url": "https://raw.githubusercontent.com/neonvoidx/pics/master/ultrawide/wallhaven-7jjwp3.jpg",
-  "license": "unclear"
- },
- {
-  "id": "gh-wh-gunships",
-  "collection": "spaceships",
-  "title": "Fleet over red moon",
-  "source": "neonvoidx/pics",
-  "page": "https://github.com/neonvoidx/pics/blob/master/ultrawide/wallhaven-qr379q.jpg",
-  "url": "https://raw.githubusercontent.com/neonvoidx/pics/master/ultrawide/wallhaven-qr379q.jpg",
-  "license": "unclear"
- },
- {
-  "id": "gh-wh-landed-ship",
-  "collection": "spaceships",
-  "title": "Landed saucer in fog",
-  "source": "neonvoidx/pics",
-  "page": "https://github.com/neonvoidx/pics/blob/master/ultrawide/wallhaven-qrr8gr.jpg",
-  "url": "https://raw.githubusercontent.com/neonvoidx/pics/master/ultrawide/wallhaven-qrr8gr.jpg",
-  "license": "unclear"
- },
- {
-  "id": "pd-mars-orbit-rendez-vous-s95-01407",
-  "collection": "spaceships",
-  "title": "Mars Orbit Rendezvous",
-  "source": "NASA/SAIC space art",
-  "page": "https://commons.wikimedia.org/wiki/File:Mars_orbit_rendez_vous_S95_01407.jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/9/92/Mars_orbit_rendez_vous_S95_01407.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
- },
- {
-  "id": "pd-nasa-artwork-by-don-davis-space-colony-t",
-  "collection": "spaceships",
-  "title": "Torus Wheel Assembly",
-  "source": "NASA Ames Space Settlement (1970s)",
-  "page": "https://commons.wikimedia.org/wiki/File:NASA_Artwork_By-_Don_Davis_Space_Colony-_Torus_Wheel_-_Large_assemblies_can_be_put_together_in_space_(ARC-1975-AC75-1886).jpg",
-  "url": "https://upload.wikimedia.org/wikipedia/commons/d/df/NASA_Artwork_By-_Don_Davis_Space_Colony-_Torus_Wheel_-_Large_assemblies_can_be_put_together_in_space_%28ARC-1975-AC75-1886%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-  "license": "Public domain (NASA)"
  },
  {
   "id": "pd-ntr-propulsive-capture-at-mars",
