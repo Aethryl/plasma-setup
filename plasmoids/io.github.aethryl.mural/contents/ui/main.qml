@@ -415,6 +415,68 @@ PlasmoidItem {
                         Layout.fillWidth: true
                         spacing: Kirigami.Units.largeSpacing
 
+                        RowLayout {
+                            Layout.fillWidth: true
+                            spacing: Kirigami.Units.smallSpacing * 2
+                            visible: !!root.current
+
+                            Kirigami.ShadowedImage {
+                                Layout.preferredWidth: Kirigami.Units.gridUnit * 3
+                                Layout.preferredHeight: Math.round(Layout.preferredWidth * 9 / 21)
+                                source: root.current ? root.imageUrl(root.current.path) : ""
+                                sourceSize.width: Kirigami.Units.gridUnit * 6
+                                fillMode: Image.PreserveAspectCrop
+                                asynchronous: true
+                                radius: Kirigami.Units.cornerRadius
+                                color: Qt.alpha(Kirigami.Theme.textColor, 0.06)
+                            }
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 0
+                                Caption { text: "Now showing" }
+                                PlasmaComponents.Label {
+                                    Layout.fillWidth: true
+                                    text: root.current ? root.current.title : ""
+                                    elide: Text.ElideRight
+                                }
+                            }
+                            PlasmaComponents.ToolButton {
+                                icon.name: "view-hidden"
+                                display: PlasmaComponents.AbstractButton.IconOnly
+                                text: "Remove from rotation"
+                                PlasmaComponents.ToolTip.text: text
+                                PlasmaComponents.ToolTip.visible: hovered
+                                PlasmaComponents.ToolTip.delay: Kirigami.Units.toolTipDelay
+                                onClicked: root.advance("exclude " + root.quote(root.current.id))
+                            }
+                            PlasmaComponents.ToolButton {
+                                icon.name: "edit-delete"
+                                icon.color: root.deleteArmed ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                                display: root.deleteArmed ? PlasmaComponents.AbstractButton.TextBesideIcon : PlasmaComponents.AbstractButton.IconOnly
+                                text: root.deleteArmed ? "Delete?" : "Delete"
+                                PlasmaComponents.ToolTip.text: root.deleteArmed ? "Click again to move it to the trash" : "Delete this wallpaper"
+                                PlasmaComponents.ToolTip.visible: hovered
+                                PlasmaComponents.ToolTip.delay: Kirigami.Units.toolTipDelay
+                                onClicked: {
+                                    if (root.deleteArmed) {
+                                        root.deleteArmed = false
+                                        root.advance("delete " + root.quote(root.current.id))
+                                    } else {
+                                        root.deleteArmed = true
+                                    }
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            visible: !!root.current
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 1
+                            color: root.hairline
+                        }
+
+                        Caption { text: "Up next" }
+
                         Rectangle {
                             Layout.fillWidth: true
                             Layout.preferredHeight: Math.round(width * 9 / 21)
@@ -424,7 +486,7 @@ PlasmoidItem {
                             Kirigami.ShadowedImage {
                                 id: preview
                                 anchors.fill: parent
-                                source: root.current ? root.imageUrl(root.current.path) : ""
+                                source: root.upNext ? root.imageUrl(root.upNext.path) : ""
                                 sourceSize.width: Kirigami.Units.gridUnit * 48
                                 fillMode: Image.PreserveAspectCrop
                                 asynchronous: true
@@ -435,15 +497,15 @@ PlasmoidItem {
                             }
                             PlasmaComponents.Label {
                                 anchors.centerIn: parent
-                                visible: !root.current
-                                text: root.wall && root.wall.total === 0 ? "No wallpapers in library" : "No wallpaper set"
+                                visible: !root.upNext
+                                text: root.wall && root.wall.total === 0 ? "No wallpapers in library" : "Nothing queued"
                                 color: root.dim
                             }
                         }
 
                         RowLayout {
                             Layout.fillWidth: true
-                            visible: !!root.current
+                            visible: !!root.upNext
                             spacing: Kirigami.Units.smallSpacing * 2
 
                             ColumnLayout {
@@ -451,20 +513,20 @@ PlasmoidItem {
                                 spacing: 0
                                 PlasmaComponents.Label {
                                     Layout.fillWidth: true
-                                    text: root.current ? root.current.title : ""
+                                    text: root.upNext ? root.upNext.title : ""
                                     font.weight: Font.DemiBold
                                     elide: Text.ElideRight
                                 }
                                 PlasmaComponents.Label {
                                     Layout.fillWidth: true
-                                    text: root.current ? root.current.collection : ""
+                                    text: root.upNext ? root.upNext.collection : ""
                                     color: root.dim
                                     font.pointSize: Kirigami.Theme.smallFont.pointSize
                                     elide: Text.ElideRight
                                 }
                             }
                             PlasmaComponents.Label {
-                                readonly property string url: root.pageUrl(root.current)
+                                readonly property string url: root.pageUrl(root.upNext)
                                 visible: url !== ""
                                 text: (root.host(url) || "source") + " ↗"
                                 color: linkHover.containsMouse ? Kirigami.Theme.linkColor : Qt.alpha(Kirigami.Theme.linkColor, 0.8)
@@ -485,32 +547,23 @@ PlasmoidItem {
                             spacing: Kirigami.Units.smallSpacing * 2
 
                             Action {
-                                text: "Next"
+                                text: "Show now"
                                 icon: "media-skip-forward"
-                                enabled: !!root.wall && root.wall.total > 0
+                                enabled: !!root.upNext
                                 onClicked: root.advance("next")
+                            }
+                            Action {
+                                text: "Skip"
+                                icon: "media-playlist-shuffle"
+                                enabled: !!root.upNext
+                                onClicked: root.run("skip")
                             }
                             Action {
                                 text: "Remove"
                                 icon: "view-hidden"
                                 tone: Kirigami.Theme.neutralTextColor
-                                enabled: !!root.current
-                                onClicked: root.advance("exclude " + root.quote(root.current.id))
-                            }
-                            Action {
-                                text: root.deleteArmed ? "Click again to delete" : "Delete"
-                                icon: "edit-delete"
-                                tone: Kirigami.Theme.negativeTextColor
-                                alert: root.deleteArmed
-                                enabled: !!root.current
-                                onClicked: {
-                                    if (root.deleteArmed) {
-                                        root.deleteArmed = false
-                                        root.advance("delete " + root.quote(root.current.id))
-                                    } else {
-                                        root.deleteArmed = true
-                                    }
-                                }
+                                enabled: !!root.upNext
+                                onClicked: root.run("exclude " + root.quote(root.upNext.id))
                             }
                         }
 

@@ -170,6 +170,8 @@ def status(state: dict) -> dict:
             "id": upcoming,
             "title": meta.get(upcoming, {}).get("title") or upcoming,
             "collection": path.parent.name,
+            "source": meta.get(upcoming, {}).get("source"),
+            "page": meta.get(upcoming, {}).get("page"),
             "path": str(path),
         }
     return {
@@ -365,7 +367,7 @@ def fetch(state: dict) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(prog="mural")
     sub = parser.add_subparsers(dest="command", required=True)
-    for name in ("status", "list", "next", "fetch", "on", "off"):
+    for name in ("status", "list", "next", "skip", "fetch", "on", "off"):
         sub.add_parser(name)
     sub.add_parser("collection").add_argument("name")
     sub.add_parser("interval").add_argument("minutes", type=int)
@@ -394,6 +396,10 @@ def main() -> None:
     current = state["current"]
     if command == "next":
         advance(state)
+    elif command == "skip":
+        queue = state["queue"]
+        if len(queue) > 1:
+            queue.append(queue.pop(0))
     elif command in ("on", "off"):
         state["enabled"] = command == "on"
         if state["enabled"]:
