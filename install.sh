@@ -7,6 +7,8 @@ data="${XDG_DATA_HOME:-$HOME/.local/share}"
 mkdir -p "$data/kwin/scripts" "$data/aurorae/themes" "$data/color-schemes" \
     "$data/applications" "$HOME/.local/bin"
 ln -sfn "$repo/kwin-scripts/floatingwindows" "$data/kwin/scripts/floatingwindows"
+mkdir -p "$data/kwin/effects"
+ln -sfn "$repo/kwin-effects/kwin4_effect_geometry_change" "$data/kwin/effects/kwin4_effect_geometry_change"
 
 for variant in Dark Light; do
     theme="$data/aurorae/themes/Everforest-$variant"
@@ -37,6 +39,8 @@ systemctl --user link "$repo/systemd/plasma-shell-override.service"
 systemctl --user enable plasma-shell-override.service
 
 kwriteconfig6 --file kwinrc --group Plugins --key floatingwindowsEnabled true
+kwriteconfig6 --file kwinrc --group Plugins --key kwin4_effect_geometry_changeEnabled true
+kwriteconfig6 --file kwinrc --group Effect-kwin4_effect_geometry_change --key Duration 180
 for key in DisableRoundMaximize DisableOutlineMaximize DisableRoundTile DisableOutlineTile; do
     kwriteconfig6 --file kwinrc --group Effect-shapecorners --key "$key" false
 done
