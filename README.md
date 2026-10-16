@@ -22,6 +22,8 @@ Related repos, all applied by chezmoi from [dotfiles](https://github.com/Aethryl
 | `wallpapers/` | On-palette wallpapers for each mode, also used on the lock screen. |
 | `bin/everforest` | `everforest [dark\|light\|toggle\|status]` switches the colour scheme, window decoration, GTK preference and btop theme. It also sets the matching wallpaper, but only while mural rotation is off. The lock screen is left alone. Bound to Meta+Shift+L and also runnable from KRunner ("Toggle light/dark"). ghostty follows on its own with `theme = light:Everforest Light Med,dark:Everforest Dark Hard`. |
 
+`install.sh` also turns off autostart items this setup doesn't use: Discover's tray notifier (the statusbar shows updates), the calendar reminder daemon and Akonadi (no KMail/KOrganizer), KDE's push-notification distributor, Fedora's live-installer helper, the Geoclue demo agent and GNOME's localsearch indexer (Baloo already indexes). Undo one by deleting its file in `~/.config/autostart/`, or `systemctl --user unmask akonadi_control.service` for Akonadi.
+
 ## Requirements
 
 - Plasma 6 (tested on 6.7.5)
