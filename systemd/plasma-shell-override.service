@@ -5,7 +5,7 @@ PartOf=graphical-session.target
 
 [Service]
 Type=oneshot
-ExecStart=%h/Repos/plasma-customizations/shell-override/sync.sh
+ExecStart=%h/Repos/rice/plasma-setup/shell-override/sync.sh
 
 [Install]
 WantedBy=plasma-plasmashell.service
