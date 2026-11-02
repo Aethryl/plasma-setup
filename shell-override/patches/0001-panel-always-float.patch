@@ -1,23 +1,23 @@
---- a/contents/views/Panel.qml	2026-09-08 02:00:00.000000000 +0200
-+++ b/contents/views/Panel.qml	2026-10-15 23:29:02.817794828 +0200
-@@ -51,10 +51,12 @@
+--- a/contents/views/Panel.qml	2026-11-02 09:08:25.783492859 +0100
++++ b/contents/views/Panel.qml	2026-11-02 09:08:25.784492848 +0100
+@@ -52,10 +52,12 @@
  
      // NOTE: Many of the properties in this file are accessed directly in C++ PanelView!
      // If you change these, make sure to also correct the related code in panelview.cpp.
 -    readonly property int fixedBottomFloatingPadding: floating && (floatingPrefix ? floatingPanelSvg.fixedMargins.bottom : 8)
-+    readonly property int fixedBottomFloatingPadding: floating && (topBar ? 0 : (floatingPrefix ? floatingPanelSvg.fixedMargins.bottom : 8))
 -    readonly property int fixedLeftFloatingPadding: floating && (floatingPrefix ? floatingPanelSvg.fixedMargins.left   : 8)
-+    readonly property int fixedLeftFloatingPadding: floating && (topBar ? 6 : (floatingPrefix ? floatingPanelSvg.fixedMargins.left : 8))
 -    readonly property int fixedRightFloatingPadding: floating && (floatingPrefix ? floatingPanelSvg.fixedMargins.right  : 8)
-+    readonly property int fixedRightFloatingPadding: floating && (topBar ? 6 : (floatingPrefix ? floatingPanelSvg.fixedMargins.right : 8))
 -    readonly property int fixedTopFloatingPadding: floating && (floatingPrefix ? floatingPanelSvg.fixedMargins.top    : 8)
++    readonly property int fixedBottomFloatingPadding: floating && (topBar ? 0 : (floatingPrefix ? floatingPanelSvg.fixedMargins.bottom : 8))
++    readonly property int fixedLeftFloatingPadding: floating && (topBar ? 6 : (floatingPrefix ? floatingPanelSvg.fixedMargins.left : 8))
++    readonly property int fixedRightFloatingPadding: floating && (topBar ? 6 : (floatingPrefix ? floatingPanelSvg.fixedMargins.right : 8))
 +    readonly property int fixedTopFloatingPadding: floating && (topBar ? 3 : (floatingPrefix ? floatingPanelSvg.fixedMargins.top : 8))
 +    readonly property bool topBar: !verticalPanel && !bottomEdge
 +    readonly property int windowGap: floating && topBar ? fixedTopFloatingPadding : 0
  
      readonly property int topPadding: Math.round(Math.min(thickPanelSvg.fixedMargins.top + Kirigami.Units.smallSpacing, spacingAtMinSize));
      readonly property int bottomPadding: Math.round(Math.min(thickPanelSvg.fixedMargins.bottom + Kirigami.Units.smallSpacing, spacingAtMinSize));
-@@ -95,7 +97,7 @@
+@@ -97,7 +99,7 @@
      Timer {
          id: touchingWindowDebounceTimer
          interval: 10  // ms, I find that this value is enough while not causing unresponsiveness while dragging windows close
@@ -26,21 +26,21 @@
      }
      onTouchingWindowDirectChanged: touchingWindowDebounceTimer.start()
      onShowingDesktopChanged: touchingWindowDebounceTimer.start()
-@@ -158,7 +160,7 @@
+@@ -160,7 +162,7 @@
          x: root.rightEdge ? root.fixedLeftFloatingPadding + root.fixedRightFloatingPadding * (1 - root.floatingness) : root.leftFloatingPadding
          y: root.bottomEdge ? root.fixedTopFloatingPadding + root.fixedBottomFloatingPadding * (1 - root.floatingness) : root.topFloatingPadding
          width: root.verticalPanel ? panel.thickness : parent.width - root.leftFloatingPadding - root.rightFloatingPadding
 -        height: root.verticalPanel ? parent.height - root.topFloatingPadding - root.bottomFloatingPadding : panel.thickness
 +        height: root.verticalPanel ? parent.height - root.topFloatingPadding - root.bottomFloatingPadding : panel.thickness - root.windowGap
  
-         imagePath: containment?.plasmoid?.backgroundHints === PlasmaCore.Types.NoBackground ? "" : "widgets/panel-background"
+         imagePath: root.containment?.plasmoid?.backgroundHints === PlasmaCore.Types.NoBackground ? "" : "widgets/panel-background"
      }
-@@ -169,6 +171,14 @@
+@@ -171,6 +173,14 @@
          anchors.fill: floatingTranslucentItem
-         imagePath: containment?.plasmoid?.backgroundHints === PlasmaCore.Types.NoBackground ? "" : "solid/widgets/panel-background"
+         imagePath: root.containment?.plasmoid?.backgroundHints === PlasmaCore.Types.NoBackground ? "" : "solid/widgets/panel-background"
      }
 +    Rectangle {
-+        visible: root.floatingness !== 0 && containment?.plasmoid?.backgroundHints !== PlasmaCore.Types.NoBackground
++        visible: root.floatingness !== 0 && root.containment?.plasmoid?.backgroundHints !== PlasmaCore.Types.NoBackground
 +        anchors.fill: floatingTranslucentItem
 +        radius: Kirigami.Units.cornerRadius
 +        color: Qt.tint(Kirigami.Theme.backgroundColor, Qt.alpha(Kirigami.Theme.textColor, 0.08))
@@ -50,7 +50,7 @@
      KSvg.FrameSvgItem {
          id: opaqueItem
          visible: root.panelOpacity !== 0 && root.floatingness === 0
-@@ -369,6 +379,6 @@
+@@ -366,6 +376,6 @@
          id: containmentParent
          anchors.centerIn: root.isOpaque ? floatingOpaqueItem : floatingTranslucentItem
          width: root.verticalPanel ? panel.thickness : root.width - root.fixedLeftFloatingPadding - root.fixedRightFloatingPadding
