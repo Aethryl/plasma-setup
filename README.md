@@ -12,8 +12,9 @@ Related repos, all applied by chezmoi from [dotfiles](https://github.com/Aethryl
 
 | Path | What it does |
 |---|---|
-| `shell-override/` | Patched copy of the Plasma desktop shell: floating panels (the top bar and the dock) get the bar's tinted fill, hairline border and rounded corners; the top bar always floats, has a tiny top gap, and reserves only its drawn height. |
+| `shell-override/` | Patched copy of the Plasma desktop shell: floating panels (the top bar and the dock) get the bar's tinted fill, hairline border and rounded corners; the top bar always floats, has a tiny top gap, and reserves only its drawn height.  The lock screen unlocks straight away when PAM succeeds without a prompt (Howdy face unlock), instead of showing the Unlock button. |
 | `systemd/plasma-shell-override.service` | Rebuilds the shell override from the system copy before each plasmashell start, so Plasma updates are picked up. |
+| `systemd/plasma-shell-override.path` | Re-runs that rebuild when the system shell files change (e.g. a mid-session `dnf upgrade`). It never restarts plasmashell; do that yourself to load the new copy. |
 | `kwin-scripts/floatingwindows` | Insets maximized and quick-tiled (Meta+arrows: halves and quarters) windows by a small gap so they float like the bar; tiles that meet get half a gap each. Apps listed in the script's `exclude` setting (comma-separated window classes, empty by default) stay edge to edge. |
 | `kwin-effects/kwin4_effect_geometry_change` | [Geometry Change](https://github.com/peterfajdiga/kwin4_effect_geometry_change) v1.5 by Peter Fajdiga (GPL-3.0, vendored): eases windows into their new size and position when a script or shortcut moves them, such as Meta+arrow tiling and the floating gaps. Runs in the compositor; set to 180 ms. |
 | `aurorae/Everforest-Dark`, `aurorae/Everforest-Light` | Window decorations in the [Everforest](https://github.com/sainnhe/everforest) palette. They are recoloured from `aurorae/CatppuccinMocha-Classic`, the [Catppuccin](https://github.com/catppuccin/kde) Mocha Classic decoration (MIT), tweaked to drop the titlebar blur mask and the 1px outer border and to widen the button margins. |

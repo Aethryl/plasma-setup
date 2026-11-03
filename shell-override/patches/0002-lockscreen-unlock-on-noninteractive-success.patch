@@ -1,0 +1,24 @@
+--- a/contents/lockscreen/LockScreenUi.qml	2026-11-03 09:15:19.987528825 +0100
++++ b/contents/lockscreen/LockScreenUi.qml	2026-11-03 09:15:19.989117851 +0100
+@@ -71,20 +71,7 @@
+             // This is important. It stops the all pending authentication processes, preventing timeouts etc.
+             authenticator.stopAuthenticating()
+ 
+-            if (!lockScreenUi.expectingPrompt) {
+-                Qt.quit()
+-            }
+-            if (authenticator.hadPrompt) {
+-                Qt.quit();
+-            } else {
+-                mainStack.replace(null, Qt.resolvedUrl("NoPasswordUnlock.qml"),
+-                    {
+-                        userListModel: users
+-                    },
+-                    StackView.Immediate,
+-                );
+-                mainStack.forceActiveFocus();
+-            }
++            Qt.quit()
+         }
+ 
+         function onInfoMessageChanged() {

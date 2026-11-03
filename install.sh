@@ -37,6 +37,8 @@ kwriteconfig6 --file kglobalshortcutsrc --group services --group everforest-togg
 "$repo/shell-override/sync.sh"
 systemctl --user link "$repo/systemd/plasma-shell-override.service"
 systemctl --user enable plasma-shell-override.service
+systemctl --user link "$repo/systemd/plasma-shell-override.path"
+systemctl --user enable --now plasma-shell-override.path
 
 kwriteconfig6 --file kwinrc --group Plugins --key floatingwindowsEnabled true
 kwriteconfig6 --file kwinrc --group Plugins --key kwin4_effect_geometry_changeEnabled true

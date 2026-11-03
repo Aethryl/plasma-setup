@@ -1,0 +1,10 @@
+[Unit]
+Description=Watch Plasma desktop shell for updates
+
+[Path]
+PathChanged=/usr/share/plasma/shells/org.kde.plasma.desktop/metadata.json
+PathChanged=/usr/share/plasma/shells/org.kde.plasma.desktop/contents/views/Panel.qml
+Unit=plasma-shell-override.service
+
+[Install]
+WantedBy=default.target
