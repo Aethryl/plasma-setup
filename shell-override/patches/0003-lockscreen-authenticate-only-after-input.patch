@@ -1,0 +1,28 @@
+--- a/contents/lockscreen/LockScreenUi.qml	2026-11-04 09:37:40.192793107 +0100
++++ b/contents/lockscreen/LockScreenUi.qml	2026-11-04 09:37:46.748333163 +0100
+@@ -38,6 +38,9 @@
+     property bool showPrompt: false // this is set for real when an authenticator is selected
+ 
+     function handleMessage(msg) {
++        if (!msg) {
++            return;
++        }
+         if (!root.notification) {
+             root.notification += msg;
+         } else if (root.notification.includes(msg)) {
+@@ -141,6 +144,7 @@
+         onUiVisibleChanged: {
+             if (uiVisible) {
+                 Window.window.requestActivate();
++                authenticator.startAuthenticating();
+             }
+ 
+             if (blockUI) {
+@@ -148,7 +152,6 @@
+             } else if (uiVisible) {
+                 fadeoutTimer.restart();
+             }
+-            authenticator.startAuthenticating();
+         }
+ 
+         Timer { // heart beat keeping the backend active for as long as we are in visible state
