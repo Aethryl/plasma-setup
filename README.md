@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
+  <img src=".github/logo-light.svg" width="64" height="64" alt="rice">
+</picture>
+
 # plasma-setup
 
 The KDE Plasma 6 layer of my setup, independent of the distro: a floating top bar, floating maximized windows, and an Everforest theme with a light/dark switch.
