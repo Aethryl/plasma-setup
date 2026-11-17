@@ -31,6 +31,10 @@ Related repos, all applied by chezmoi from [dotfiles](https://github.com/Aethryl
 
 `install.sh` also turns off autostart items this setup doesn't use: Discover's tray notifier (the statusbar shows updates), the calendar reminder daemon and Akonadi (no KMail/KOrganizer), KDE's push-notification distributor, Fedora's live-installer helper, the Geoclue demo agent and GNOME's localsearch indexer (Baloo already indexes). Undo one by deleting its file in `~/.config/autostart/`, or `systemctl --user unmask akonadi_control.service` for Akonadi.
 
+## Licence
+
+MIT (see `LICENSE`), except `kwin-effects/kwin4_effect_geometry_change`, which is GPL-3.0 (Peter Fajdiga; licence in its `LICENSE`). The `aurorae/` themes are derived from Catppuccin and carry its MIT notice in their `LICENSE` files.
+
 ## Requirements
 
 - Plasma 6 (tested on 6.7.5)
@@ -42,6 +46,8 @@ Related repos, all applied by chezmoi from [dotfiles](https://github.com/Aethryl
 ./install.sh
 systemctl --user restart plasma-plasmashell
 ```
+
+The clone can live anywhere; `install.sh` points the systemd unit at its real path (default `~/Repos/rice/plasma-setup` is linked as is).
 
 ## Undo the shell override
 
