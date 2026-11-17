@@ -35,7 +35,15 @@ ln -sfn "$repo/applications/everforest-toggle.desktop" "$data/applications/everf
 kwriteconfig6 --file kglobalshortcutsrc --group services --group everforest-toggle.desktop --key _launch "Meta+Shift+L"
 
 "$repo/shell-override/sync.sh"
-systemctl --user link "$repo/systemd/plasma-shell-override.service"
+unit_dir="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
+if [[ "$repo" == "$HOME/Repos/rice/plasma-setup" ]]; then
+    systemctl --user link "$repo/systemd/plasma-shell-override.service"
+else
+    mkdir -p "$unit_dir"
+    rm -f "$unit_dir/plasma-shell-override.service"
+    sed "s|^ExecStart=.*|ExecStart=$repo/shell-override/sync.sh|" "$repo/systemd/plasma-shell-override.service" > "$unit_dir/plasma-shell-override.service"
+    systemctl --user daemon-reload
+fi
 systemctl --user enable plasma-shell-override.service
 systemctl --user link "$repo/systemd/plasma-shell-override.path"
 systemctl --user enable --now plasma-shell-override.path
