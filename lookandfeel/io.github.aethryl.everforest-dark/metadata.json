@@ -1,7 +1,7 @@
 {
     "KPackageStructure": "Plasma/LookAndFeel",
     "KPlugin": {
-        "Authors": [{ "Name": "Fabian" }],
+        "Authors": [{ "Name": "Aethryl" }],
         "Description": "Everforest Dark colours, window decoration and icons",
         "Id": "io.github.aethryl.everforest-dark",
         "License": "MIT",

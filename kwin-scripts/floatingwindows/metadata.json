@@ -1,7 +1,7 @@
 {
     "KPackageStructure": "KWin/Script",
     "KPlugin": {
-        "Authors": [{ "Name": "Fabian" }],
+        "Authors": [{ "Name": "Aethryl" }],
         "Description": "Keep maximized windows floating with a small gap",
         "Id": "floatingwindows",
         "License": "MIT",
