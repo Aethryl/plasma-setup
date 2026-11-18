@@ -7,10 +7,10 @@
 
 The KDE Plasma 6 layer of my setup, independent of the distro: a floating top bar, floating maximized windows, and an Everforest theme with a light/dark switch.
 
-Related repos, all applied by chezmoi from [dotfiles](https://github.com/Aethryl/dotfiles):
+Related repos, all applied by chezmoi from my dotfiles:
 
-- [plasma-widgets](https://github.com/Aethryl/plasma-widgets): claudebar, sysbar and the mural wallpaper rotator
-- [wallpapers](https://github.com/Aethryl/wallpapers): the wallpaper collection
+- Widgets: [plasma-claudebar](https://github.com/Aethryl/plasma-claudebar), [plasma-statusbar](https://github.com/Aethryl/plasma-statusbar), [plasma-soundbar](https://github.com/Aethryl/plasma-soundbar), [plasma-sysbar](https://github.com/Aethryl/plasma-sysbar) and [plasma-mural](https://github.com/Aethryl/plasma-mural) (wallpaper rotator)
+- wallpapers: the wallpaper collection
 - dotfiles: shell, terminal and app configs, plus OS packages
 
 ## What's in here
@@ -56,3 +56,5 @@ systemctl --user disable --now plasma-shell-override.service
 rm -rf ~/.local/share/plasma/shells/org.kde.plasma.desktop
 systemctl --user restart plasma-plasmashell
 ```
+
+The `shell-override/patches/*.patch` files patch KDE plasma-desktop (GPL-2.0-or-later) and are under that upstream licence.
